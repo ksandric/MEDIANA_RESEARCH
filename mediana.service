@@ -1,0 +1,15 @@
+[Unit]
+Description=Mediana Research FastAPI Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/mediana
+ExecStart=/usr/bin/python3 run_site.py
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
