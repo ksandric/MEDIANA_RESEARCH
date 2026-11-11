@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 import html
 import json
@@ -6,6 +8,7 @@ from datetime import datetime, timezone
 from email.utils import formatdate
 from functools import lru_cache
 from pathlib import Path
+from typing import Optional
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
@@ -67,7 +70,7 @@ async def http_error(request: Request, exc: StarletteHTTPException) -> Response:
 # ---------------------------------------------------------------- SEO
 
 def seo_head(*, title: str, headline: str, description: str, path: str,
-             published: str | None = None, pdf: str | None = None) -> bytes:
+             published: Optional[str] = None, pdf: Optional[str] = None) -> bytes:
     """<head> block for a research / press-release page.
 
     Those pages are pdf2htmlEX exports with an empty <title>, so the tags are
@@ -126,7 +129,7 @@ def seo_head(*, title: str, headline: str, description: str, path: str,
 
 
 @lru_cache(maxsize=1)
-def _press_releases(index_mtime: int) -> dict[tuple[str, str, str], tuple[str, str | None]]:
+def _press_releases(index_mtime: int) -> dict[tuple[str, str, str], tuple[str, Optional[str]]]:
     text = INDEX_FILE.read_text(encoding="utf-8")
     return {
         (y, m, d): (html.unescape(title).strip(), pdf)
@@ -134,17 +137,17 @@ def _press_releases(index_mtime: int) -> dict[tuple[str, str, str], tuple[str, s
     }
 
 
-def press_releases() -> dict[tuple[str, str, str], tuple[str, str | None]]:
+def press_releases() -> dict[tuple[str, str, str], tuple[str, Optional[str]]]:
     """Press-release titles and PDFs, taken from the list on the index page."""
     return _press_releases(INDEX_FILE.stat().st_mtime_ns)
 
 
-def research_pdf(year: str, month: str) -> str | None:
+def research_pdf(year: str, month: str) -> Optional[str]:
     name = f"mediana-research_{MONTHS_EN[int(month) - 1]}{year}.pdf"
     return name if (STATIC_DIR / name).is_file() else None
 
 
-def pdf_canonical(name: str) -> str | None:
+def pdf_canonical(name: str) -> Optional[str]:
     """HTML page a PDF duplicates, so search engines index the page, not the file."""
     if m := RESEARCH_PDF.fullmatch(name):
         month = f"{MONTHS_EN.index(m[1]) + 1:02d}"
