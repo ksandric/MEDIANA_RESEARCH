@@ -1,14 +1,166 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<title>mediana</title>
 <meta charset="UTF-8">
+<title>Mediana Research — исследования рынка алгоритмического трейдинга криптовалют</title>
+<meta name="description" content="Mediana Research с 2021 года исследует рынок алгоритмического трейдинга криптовалют: доходность, убыточность и выживаемость алготрейдинговых проектов, индекс MEDIANA. Ежемесячные отчёты в PDF и данные в CSV.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="/static/images/mediana_lg2.png" type="image/x-icon">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="canonical" href="https://mediana-research.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mediana Research">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="Mediana Research — исследования рынка алгоритмического трейдинга криптовалют">
+<meta property="og:description" content="Ежемесячные исследования рынка алгоритмического трейдинга криптовалют: доходность, убыточность и выживаемость алготрейдинговых проектов, индекс MEDIANA.">
+<meta property="og:url" content="https://mediana-research.com/">
+<meta property="og:image" content="https://mediana-research.com/static/images/icon-512.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/static/images/mediana_lg2.avif" type="image/avif">
+<link rel="icon" href="/static/images/icon-180.png" type="image/png" sizes="180x180">
+<link rel="apple-touch-icon" href="/static/images/icon-180.png">
+<meta name="theme-color" content="#332b40">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&amp;display=swap">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mediana-research.com/#organization",
+      "name": "Mediana Research",
+      "url": "https://mediana-research.com/",
+      "logo": "https://mediana-research.com/static/images/icon-512.png",
+      "description": "Исследовательская компания, изучающая рынок алгоритмического трейдинга криптовалют.",
+      "sameAs": ["https://t.me/MedianaResearch"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://mediana-research.com/#website",
+      "name": "Mediana Research",
+      "url": "https://mediana-research.com/",
+      "inLanguage": "ru",
+      "publisher": {"@id": "https://mediana-research.com/#organization"}
+    }
+  ]
+}
+</script>
 <style>
-body,h1,h2,h3,h4,h6 {font-family: "Raleway", sans-serif}
+:root{
+  --brand:#332b40; --bg:#f6f5f9; --surface:#ffffff; --ink:#1f1a29; --muted:#6d6779;
+  --line:#e7e3ee; --accent:#6a4cf0; --chip:#f1eef8; --gold:#ffc857;
+  --shadow:0 1px 2px rgba(31,26,41,.05),0 8px 24px rgba(31,26,41,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#131019; --surface:#1d1926; --ink:#edeaf4; --muted:#a8a1b6;
+        --line:#2e283a; --accent:#ab98ff; --chip:#292335; --shadow:none}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.6 "Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-feature-settings:"lnum" 1;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+/* hero */
+.hero{color:#fff;position:relative;overflow:hidden;
+  background:
+    radial-gradient(900px 420px at 85% -5%,rgba(138,108,240,.38),transparent 65%),
+    linear-gradient(160deg,#3b3149 0%,#332b40 45%,#1c1725 100%)}
+.hero::before{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;
+  background:repeating-linear-gradient(115deg,#fff 0 2px,transparent 2px 22px)}
+.nav{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 0}
+.brand{font-weight:800;letter-spacing:.14em;font-size:14px;text-decoration:none}
+.nav nav{display:flex;gap:22px;flex-wrap:wrap;justify-content:flex-end}
+.nav nav a{font-size:14px;font-weight:600;text-decoration:none;opacity:.78}
+.nav nav a:hover{opacity:1}
+.hero-grid{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding:36px 0 112px}
+.since{display:inline-flex;align-items:center;gap:10px;margin:0 0 22px;padding:8px 16px 8px 12px;
+  border:1px solid rgba(255,200,87,.45);border-radius:999px;background:rgba(255,200,87,.1);
+  color:var(--gold);font-weight:700;font-size:14px;letter-spacing:.02em}
+.since i{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px rgba(255,200,87,.22)}
+h1{margin:0;font-size:clamp(38px,6.4vw,68px);line-height:1.02;font-weight:800;letter-spacing:.01em}
+h1 span{display:block;font-weight:400;letter-spacing:.2em;opacity:.9}
+.lead{margin:22px 0 30px;max-width:30em;font-size:clamp(17px,2vw,20px);line-height:1.5;color:rgba(255,255,255,.82)}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-block;padding:13px 22px;border-radius:12px;font-weight:700;font-size:15px;text-decoration:none;
+  border:1px solid rgba(255,255,255,.28);transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.08)}
+.btn.primary{background:#fff;color:var(--brand);border-color:#fff}
+.btn.primary:hover{background:#f1eef8}
+.hero-logo{width:100%;height:auto;max-width:440px;justify-self:end;filter:drop-shadow(0 18px 40px rgba(0,0,0,.35))}
+
+/* highlights */
+.stats{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:-64px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px 24px;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:clamp(30px,4vw,42px);line-height:1.1;font-weight:800;color:var(--ink)}
+.stat span{display:block;margin-top:6px;color:var(--muted);font-size:15px;line-height:1.4}
+.stat.key{background:linear-gradient(140deg,#ffd77e,#ffc857);border-color:transparent}
+.stat.key b,.stat.key span{color:#332b40}
+.stat.key b small{font-size:.5em;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-right:.35em}
+
+/* sections */
+main section.block{padding:64px 0 0}
+h2{margin:0 0 6px;font-size:clamp(26px,3.4vw,34px);line-height:1.15;font-weight:800}
+.sub{margin:0 0 28px;color:var(--muted)}
+.about{font-size:18px;line-height:1.65;max-width:46em;margin:0}
+.about strong{font-weight:700;box-shadow:inset 0 -.5em 0 rgba(255,200,87,.45)}
+
+.year{margin-top:30px}
+.year h3{margin:0 0 14px;display:flex;align-items:center;gap:14px;font-size:20px;font-weight:800;color:var(--muted)}
+.year h3::after{content:"";flex:1;height:1px;background:var(--line)}
+.months{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px}
+.months li{position:relative;display:flex;flex-direction:column;gap:14px;padding:16px;background:var(--surface);
+  border:1px solid var(--line);border-radius:14px;transition:border-color .15s,transform .15s,box-shadow .15s}
+.months li:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}
+.months li>a{font-weight:700;font-size:17px;line-height:1.25;text-decoration:none}
+.months li>a::after{content:"";position:absolute;inset:0;border-radius:14px}
+.months small{display:block;margin-bottom:4px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.months span{position:relative;z-index:1;display:flex;gap:6px}
+.months span a,.dl{padding:4px 11px;border-radius:999px;background:var(--chip);font-size:12px;font-weight:700;
+  letter-spacing:.05em;text-decoration:none;color:var(--muted);transition:background .15s,color .15s}
+.months span a:hover,.dl:hover{background:var(--accent);color:#fff}
+.year:first-of-type .months li:first-child{border-color:var(--accent)}
+.year:first-of-type .months li:first-child::before{content:"новое";position:absolute;top:-9px;right:12px;padding:1px 9px;
+  border-radius:999px;background:var(--accent);color:#fff;font-size:11px;font-weight:700;letter-spacing:.05em}
+@media (prefers-color-scheme:dark){.year:first-of-type .months li:first-child::before,.months span a:hover,.dl:hover{color:#15121b}}
+
+.press{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.press li{display:grid;grid-template-columns:104px 1fr auto;gap:16px;align-items:center;padding:15px 22px;border-top:1px solid var(--line)}
+.press li:first-child{border-top:0}
+.press time{color:var(--muted);font-size:14px;font-weight:600}
+.press li>a:not(.dl){font-weight:600;text-decoration:none}
+.press li>a:not(.dl):hover{color:var(--accent);text-decoration:underline}
+
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.sheet iframe{display:block;width:100%;height:560px;border:0;background:#fff}
+.head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.head-row .sub{margin:0}
+.more{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.more:hover{text-decoration:underline}
+
+footer{margin-top:80px;color:#fff;background:linear-gradient(160deg,#332b40,#1c1725)}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:44px 0}
+.foot p{margin:0;font-size:20px;font-weight:700;max-width:22em;line-height:1.35}
+.copy{border-top:1px solid rgba(255,255,255,.12);padding:18px 0;font-size:14px;color:rgba(255,255,255,.6)}
+
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr;padding:20px 0 100px}
+  .hero-logo{order:-1;max-width:240px;justify-self:start}
+  .stats{grid-template-columns:1fr}
+  .nav nav{gap:16px}
+}
+@media (max-width:560px){
+  .nav nav a:not(:last-child){display:none}
+  .months{grid-template-columns:repeat(2,1fr)}
+  .press li{grid-template-columns:1fr auto;gap:4px 12px;padding:14px 16px}
+  .press time{grid-column:1/-1}
+  .sheet iframe{height:440px}
+  main section.block{padding-top:48px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 
 <!-- Yandex.Metrika counter -->
@@ -29,112 +181,163 @@ body,h1,h2,h3,h4,h6 {font-family: "Raleway", sans-serif}
 <!-- /Yandex.Metrika counter -->
 
 </head>
-<body class="w3-light-grey">  
-<div class="w3-content" style="max-width:1400px">
+<body>
 
-  <br>
-  <header style="padding-top: 0px!important; padding-bottom: 0px!important;" class="w3-container w3-center w3-padding-32">   
-    <a href="/"><img src="/static/images/mediana_lg2.png" alt="mediana" style="width: 100%; height: auto; max-width: 425px;"></a>
-    <h1 style="font-size: xxx-large; color:#332b40;"><b>MEDIANA <span style="background-color: #332b40;" class="w3-tag"> RESEARCH</span></b></h1>
-    <p style="font-size: x-large;"><span style="background-color: #332b40;" class="w3-tag">Анализируем</span> доходность инвестиций в криптотрейдинге для вашего успеха!</p>
-  </header>
-
-<div class="w3-row">
-  
-<div class="w3-col l12 s12">  
-  <div class="w3-card-4 w3-margin w3-white">
-    <div class="w3-container">
-      <h3 style="color:#332b40;"><b>Mediana Research</b></h3>
-      <h6><span class="w3-opacity">О проекте</span></h6>
+<header class="hero">
+  <div class="wrap">
+    <div class="nav">
+      <a class="brand" href="/">MEDIANA RESEARCH</a>
+      <nav>
+        <a href="#research">Исследования</a>
+        <a href="#press">Пресс-релизы</a>
+        <a href="#table">Таблица</a>
+        <a href="https://t.me/MedianaResearch">Telegram</a>
+      </nav>
     </div>
-    <div class="w3-container">
-      <p>
-        Исследовательская компания, изучающая рынок алгоритмического трейдинга более 6 лет. Компания нацелена на создание продуктов, которые помогают всем участникам инвестиционного рынка принимать инвестиционные решения, основываясь на объективных данных. В основу исследований ложатся исключительно проверенные данные из открытых источников, что повышает уровень доверия к данным продуктам.
-      </p>
+    <div class="hero-grid">
+      <div>
+        <p class="since"><i></i>Исследуем рынок с 2021 года</p>
+        <h1>MEDIANA <span>RESEARCH</span></h1>
+        <p class="lead">Анализируем доходность инвестиций в криптотрейдинге для вашего успеха!</p>
+        <div class="actions">
+          <a class="btn primary" href="#research">Смотреть исследования</a>
+          <a class="btn" href="https://t.me/MedianaResearch">Telegram-канал</a>
+        </div>
+      </div>
+      <img class="hero-logo" src="/static/images/logo-white.avif" alt="Логотип Mediana Research" width="768" height="455">
     </div>
   </div>
+</header>
 
-  <div class="w3-card-4 w3-margin w3-white">
-    <div class="w3-container"> 
-      <h4 style="color:#332b40;"><b>Исследования 'Рынок алгоритмического трейдинга криптовалют':</b></h4>
-      <h6><a href="/article/2023/05">Исследование</a> <span class="w3-opacity">май 2023</span> <a href="https://mediana-research.com/mediana-research_may2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_052023.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2023/06">Исследование</a> <span class="w3-opacity">июнь 2023</span> <a href="https://mediana-research.com/mediana-research_jun2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_062023.csv"> скачать CSV</a></h6>    
-      <h6><a href="/article/2023/07">Исследование</a> <span class="w3-opacity">июль 2023</span> <a href="https://mediana-research.com/mediana-research_jul2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_072023.csv"> скачать CSV</a></h6>    
-      <h6><a href="/article/2023/08">Исследование</a> <span class="w3-opacity">август 2023</span> <a href="https://mediana-research.com/mediana-research_aug2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_082023.csv"> скачать CSV</a></h6>    
-      <h6><a href="/article/2023/09">Исследование</a> <span class="w3-opacity">сентябрь 2023</span> <a href="https://mediana-research.com/mediana-research_sep2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_092023.csv"> скачать CSV</a></h6>    
-      <h6><a href="/article/2023/10">Исследование</a> <span class="w3-opacity">октябрь 2023</span> <a href="https://mediana-research.com/mediana-research_oct2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_102023.csv"> скачать CSV</a></h6>    
-      <h6><a href="/article/2023/11">Исследование</a> <span class="w3-opacity">ноябрь 2023</span> <a href="https://mediana-research.com/mediana-research_nov2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_112023.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2023/12">Исследование</a> <span class="w3-opacity">декабрь 2023</span> <a href="https://mediana-research.com/mediana-research_dec2023.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_122023.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/01">Исследование</a> <span class="w3-opacity">январь 2024</span> <a href="https://mediana-research.com/mediana-research_jan2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_012024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/02">Исследование</a> <span class="w3-opacity">февраль 2024</span> <a href="https://mediana-research.com/mediana-research_feb2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_022024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/03">Исследование</a> <span class="w3-opacity">март 2024</span> <a href="https://mediana-research.com/mediana-research_mar2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_032024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/04">Исследование</a> <span class="w3-opacity">апрель 2024</span> <a href="https://mediana-research.com/mediana-research_apr2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_042024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/05">Исследование</a> <span class="w3-opacity">май 2024</span> <a href="https://mediana-research.com/mediana-research_may2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_052024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/06">Исследование</a> <span class="w3-opacity">июнь 2024</span> <a href="https://mediana-research.com/mediana-research_jun2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_062024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/07">Исследование</a> <span class="w3-opacity">июль 2024</span> <a href="https://mediana-research.com/mediana-research_jul2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_072024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/08">Исследование</a> <span class="w3-opacity">август 2024</span> <a href="https://mediana-research.com/mediana-research_aug2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_082024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/09">Исследование</a> <span class="w3-opacity">сентябрь 2024</span> <a href="https://mediana-research.com/mediana-research_sep2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_092024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/10">Исследование</a> <span class="w3-opacity">октябрь 2024</span> <a href="https://mediana-research.com/mediana-research_oct2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_102024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/11">Исследование</a> <span class="w3-opacity">ноябрь 2024</span> <a href="https://mediana-research.com/mediana-research_nov2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_112024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2024/12">Исследование</a> <span class="w3-opacity">декабрь 2024</span> <a href="https://mediana-research.com/mediana-research_dec2024.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_122024.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/01">Исследование</a> <span class="w3-opacity">январь 2025</span> <a href="https://mediana-research.com/mediana-research_jan2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_012025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/02">Исследование</a> <span class="w3-opacity">февраль 2025</span> <a href="https://mediana-research.com/mediana-research_feb2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_022025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/03">Исследование</a> <span class="w3-opacity">март 2025</span> <a href="https://mediana-research.com/mediana-research_mar2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_032025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/04">Исследование</a> <span class="w3-opacity">апрель 2025</span> <a href="https://mediana-research.com/mediana-research_apr2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_042025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/05">Исследование</a> <span class="w3-opacity">май 2025</span> <a href="https://mediana-research.com/mediana-research_may2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_052025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/06">Исследование</a> <span class="w3-opacity">июнь 2025</span> <a href="https://mediana-research.com/mediana-research_jun2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_062025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/07">Исследование</a> <span class="w3-opacity">июль 2025</span> <a href="https://mediana-research.com/mediana-research_jul2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_072025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/08">Исследование</a> <span class="w3-opacity">август 2025</span> <a href="https://mediana-research.com/mediana-research_aug2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_082025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/09">Исследование</a> <span class="w3-opacity">сентябрь 2025</span> <a href="https://mediana-research.com/mediana-research_sep2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_092025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/10">Исследование</a> <span class="w3-opacity">октябрь 2025</span> <a href="https://mediana-research.com/mediana-research_oct2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_102025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/11">Исследование</a> <span class="w3-opacity">ноябрь 2025</span> <a href="https://mediana-research.com/mediana-research_nov2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_112025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2025/12">Исследование</a> <span class="w3-opacity">декабрь 2025</span> <a href="https://mediana-research.com/mediana-research_dec2025.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_122025.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/01">Исследование</a> <span class="w3-opacity">январь 2026</span> <a href="https://mediana-research.com/mediana-research_jan2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_012026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/02">Исследование</a> <span class="w3-opacity">февраль 2026</span> <a href="https://mediana-research.com/mediana-research_feb2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_022026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/03">Исследование</a> <span class="w3-opacity">март 2026</span> <a href="https://mediana-research.com/mediana-research_mar2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_032026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/04">Исследование</a> <span class="w3-opacity">апрель 2026</span> <a href="https://mediana-research.com/mediana-research_apr2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_042026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/05">Исследование</a> <span class="w3-opacity">май 2026</span> <a href="https://mediana-research.com/mediana-research_may2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_052026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/06">Исследование</a> <span class="w3-opacity">июнь 2026</span> <a href="https://mediana-research.com/mediana-research_jun2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_062026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/07">Исследование</a> <span class="w3-opacity">июль 2026</span> <a href="https://mediana-research.com/mediana-research_jul2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_072026.csv"> скачать CSV</a></h6>
-      <h6><a href="/article/2026/08">Исследование</a> <span class="w3-opacity">август 2026</span> <a href="https://mediana-research.com/mediana-research_aug2026.pdf">скачать PDF</a> <a href="https://mediana-research.com/mediana-research_082026.csv"> скачать CSV</a></h6>
-    </div>  
+<main class="wrap">
+
+  <div class="stats">
+    <div class="stat key"><b><small>с</small>2021</b><span>года исследуем рынок алгоритмического трейдинга</span></div>
+    <div class="stat"><b>210+</b><span>алготрейдинговых проектов в выборке</span></div>
+    <div class="stat"><b>Каждый месяц</b><span>новое исследование: отчёт в PDF и данные в CSV</span></div>
   </div>
 
-  <div class="w3-card-4 w3-margin w3-white">
-    <div class="w3-container"> 
-      <h4 style="color:#332b40;"><b>Пресс-релиз</b></h4>
-      <h6><a href="/pr/2023/09/18">Август оказался рекордным по количеству “умерших” проектов</a> <span class="w3-opacity">18.09.2023</span> <a href="https://mediana-research.com/pr_1.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/10/17">Сентябрь оказался наиболее убыточным месяцем для алготрейдеров за 2,5 года</a> <span class="w3-opacity">17.10.2023</span> <a href="https://mediana-research.com/pr_2.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/10/18">Почти треть всех существующих алготрейдинговых проектов работают “в минус”</a> <span class="w3-opacity">18.10.2023</span> <a href="https://mediana-research.com/pr_3.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/11/14">По итогам октября рынок вернулся ровно на год назад по количеству работающих проектов</a> <span class="w3-opacity">14.11.2023</span> <a href="https://mediana-research.com/pr_4.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/11/15">“Сушка” - растет срок жизни игроков рынка</a> <span class="w3-opacity">15.11.2023</span> <a href="https://mediana-research.com/pr_5.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/12/12">Индекс Mediana указывает на кризис в индустрии</a> <span class="w3-opacity">12.12.2023</span> <a href="https://mediana-research.com/pr_6.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2023/12/13">Текущая тенденция - отсутствие притока “новой крови”</a> <span class="w3-opacity">13.12.2023</span> <a href="https://mediana-research.com/pr_7.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/02/18">“Сушка” рынка ускорилась и привела к рекордно низкой выживаемости</a> <span class="w3-opacity">18.02.2024</span> <a href="https://mediana-research.com/pr_8.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/02/19">Рекордно снизилась убыточность на рынке</a> <span class="w3-opacity">19.02.2024</span> <a href="https://mediana-research.com/pr_9.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/02/20">Индекс MEDIANA обновил исторические низы</a> <span class="w3-opacity">20.02.2024</span> <a href="https://mediana-research.com/pr_10.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/03/24">Индекс MEDIANA резко вырос из-за рекордной доходности</a> <span class="w3-opacity">24.03.2024</span> <a href="https://mediana-research.com/pr_11.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/04/14">“Сушка” рынка подходит к концу</a> <span class="w3-opacity">14.04.2024</span> <a href="https://mediana-research.com/pr_12.pdf">скачать PDF</a></h6>
-      <h6><a href="/pr/2024/04/15">Индекс MEDIANA бьет рекорды</a> <span class="w3-opacity">15.04.2024</span> <a href="https://mediana-research.com/pr_13.pdf">скачать PDF</a></h6>
-    </div>  
-  </div>
+  <section class="block" id="about">
+    <h2>О проекте</h2>
+    <p class="sub">Mediana Research</p>
+    <p class="about">
+      Исследовательская компания, изучающая рынок алгоритмического трейдинга <strong>с 2021 года</strong>. Компания нацелена на создание продуктов, которые помогают всем участникам инвестиционного рынка принимать инвестиционные решения, основываясь на объективных данных. В основу исследований ложатся исключительно проверенные данные из открытых источников, что повышает уровень доверия к данным продуктам.
+    </p>
+  </section>
 
-  <div class="w3-card-4 w3-margin w3-white">
-    <div class="w3-container">
-      <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml">  full screen table</a>  
+  <section class="block" id="research">
+    <h2>Исследования</h2>
+    <p class="sub">Рынок алгоритмического трейдинга криптовалют</p>
+    <!-- Новый месяц: скопируйте верхнюю строку <li> в блоке текущего года и поправьте в ней год, месяц и имена файлов.
+         Новый год: скопируйте блок <section class="year"> целиком и поставьте его первым. Метка «новое» ставится сама. -->
+    <section class="year">
+      <h3>2026</h3>
+      <ul class="months">
+        <li><a href="/article/2026/08"><small>Исследование</small> август 2026</a> <span><a href="https://mediana-research.com/mediana-research_aug2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_082026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/07"><small>Исследование</small> июль 2026</a> <span><a href="https://mediana-research.com/mediana-research_jul2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_072026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/06"><small>Исследование</small> июнь 2026</a> <span><a href="https://mediana-research.com/mediana-research_jun2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_062026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/05"><small>Исследование</small> май 2026</a> <span><a href="https://mediana-research.com/mediana-research_may2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_052026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/04"><small>Исследование</small> апрель 2026</a> <span><a href="https://mediana-research.com/mediana-research_apr2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_042026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/03"><small>Исследование</small> март 2026</a> <span><a href="https://mediana-research.com/mediana-research_mar2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_032026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/02"><small>Исследование</small> февраль 2026</a> <span><a href="https://mediana-research.com/mediana-research_feb2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_022026.csv">CSV</a></span></li>
+        <li><a href="/article/2026/01"><small>Исследование</small> январь 2026</a> <span><a href="https://mediana-research.com/mediana-research_jan2026.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_012026.csv">CSV</a></span></li>
+      </ul>
+    </section>
+    <section class="year">
+      <h3>2025</h3>
+      <ul class="months">
+        <li><a href="/article/2025/12"><small>Исследование</small> декабрь 2025</a> <span><a href="https://mediana-research.com/mediana-research_dec2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_122025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/11"><small>Исследование</small> ноябрь 2025</a> <span><a href="https://mediana-research.com/mediana-research_nov2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_112025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/10"><small>Исследование</small> октябрь 2025</a> <span><a href="https://mediana-research.com/mediana-research_oct2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_102025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/09"><small>Исследование</small> сентябрь 2025</a> <span><a href="https://mediana-research.com/mediana-research_sep2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_092025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/08"><small>Исследование</small> август 2025</a> <span><a href="https://mediana-research.com/mediana-research_aug2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_082025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/07"><small>Исследование</small> июль 2025</a> <span><a href="https://mediana-research.com/mediana-research_jul2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_072025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/06"><small>Исследование</small> июнь 2025</a> <span><a href="https://mediana-research.com/mediana-research_jun2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_062025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/05"><small>Исследование</small> май 2025</a> <span><a href="https://mediana-research.com/mediana-research_may2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_052025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/04"><small>Исследование</small> апрель 2025</a> <span><a href="https://mediana-research.com/mediana-research_apr2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_042025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/03"><small>Исследование</small> март 2025</a> <span><a href="https://mediana-research.com/mediana-research_mar2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_032025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/02"><small>Исследование</small> февраль 2025</a> <span><a href="https://mediana-research.com/mediana-research_feb2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_022025.csv">CSV</a></span></li>
+        <li><a href="/article/2025/01"><small>Исследование</small> январь 2025</a> <span><a href="https://mediana-research.com/mediana-research_jan2025.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_012025.csv">CSV</a></span></li>
+      </ul>
+    </section>
+    <section class="year">
+      <h3>2024</h3>
+      <ul class="months">
+        <li><a href="/article/2024/12"><small>Исследование</small> декабрь 2024</a> <span><a href="https://mediana-research.com/mediana-research_dec2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_122024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/11"><small>Исследование</small> ноябрь 2024</a> <span><a href="https://mediana-research.com/mediana-research_nov2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_112024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/10"><small>Исследование</small> октябрь 2024</a> <span><a href="https://mediana-research.com/mediana-research_oct2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_102024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/09"><small>Исследование</small> сентябрь 2024</a> <span><a href="https://mediana-research.com/mediana-research_sep2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_092024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/08"><small>Исследование</small> август 2024</a> <span><a href="https://mediana-research.com/mediana-research_aug2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_082024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/07"><small>Исследование</small> июль 2024</a> <span><a href="https://mediana-research.com/mediana-research_jul2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_072024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/06"><small>Исследование</small> июнь 2024</a> <span><a href="https://mediana-research.com/mediana-research_jun2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_062024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/05"><small>Исследование</small> май 2024</a> <span><a href="https://mediana-research.com/mediana-research_may2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_052024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/04"><small>Исследование</small> апрель 2024</a> <span><a href="https://mediana-research.com/mediana-research_apr2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_042024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/03"><small>Исследование</small> март 2024</a> <span><a href="https://mediana-research.com/mediana-research_mar2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_032024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/02"><small>Исследование</small> февраль 2024</a> <span><a href="https://mediana-research.com/mediana-research_feb2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_022024.csv">CSV</a></span></li>
+        <li><a href="/article/2024/01"><small>Исследование</small> январь 2024</a> <span><a href="https://mediana-research.com/mediana-research_jan2024.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_012024.csv">CSV</a></span></li>
+      </ul>
+    </section>
+    <section class="year">
+      <h3>2023</h3>
+      <ul class="months">
+        <li><a href="/article/2023/12"><small>Исследование</small> декабрь 2023</a> <span><a href="https://mediana-research.com/mediana-research_dec2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_122023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/11"><small>Исследование</small> ноябрь 2023</a> <span><a href="https://mediana-research.com/mediana-research_nov2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_112023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/10"><small>Исследование</small> октябрь 2023</a> <span><a href="https://mediana-research.com/mediana-research_oct2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_102023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/09"><small>Исследование</small> сентябрь 2023</a> <span><a href="https://mediana-research.com/mediana-research_sep2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_092023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/08"><small>Исследование</small> август 2023</a> <span><a href="https://mediana-research.com/mediana-research_aug2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_082023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/07"><small>Исследование</small> июль 2023</a> <span><a href="https://mediana-research.com/mediana-research_jul2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_072023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/06"><small>Исследование</small> июнь 2023</a> <span><a href="https://mediana-research.com/mediana-research_jun2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_062023.csv">CSV</a></span></li>
+        <li><a href="/article/2023/05"><small>Исследование</small> май 2023</a> <span><a href="https://mediana-research.com/mediana-research_may2023.pdf">PDF</a> <a href="https://mediana-research.com/mediana-research_052023.csv">CSV</a></span></li>
+      </ul>
+    </section>
+  </section>
+
+  <section class="block" id="press">
+    <h2>Пресс-релизы</h2>
+    <p class="sub">Главное из исследований коротко</p>
+    <ul class="press">
+      <li><time datetime="2024-04-15">15.04.2024</time> <a href="/pr/2024/04/15">Индекс MEDIANA бьет рекорды</a> <a class="dl" href="https://mediana-research.com/pr_13.pdf">PDF</a></li>
+      <li><time datetime="2024-04-14">14.04.2024</time> <a href="/pr/2024/04/14">“Сушка” рынка подходит к концу</a> <a class="dl" href="https://mediana-research.com/pr_12.pdf">PDF</a></li>
+      <li><time datetime="2024-03-24">24.03.2024</time> <a href="/pr/2024/03/24">Индекс MEDIANA резко вырос из-за рекордной доходности</a> <a class="dl" href="https://mediana-research.com/pr_11.pdf">PDF</a></li>
+      <li><time datetime="2024-02-20">20.02.2024</time> <a href="/pr/2024/02/20">Индекс MEDIANA обновил исторические низы</a> <a class="dl" href="https://mediana-research.com/pr_10.pdf">PDF</a></li>
+      <li><time datetime="2024-02-19">19.02.2024</time> <a href="/pr/2024/02/19">Рекордно снизилась убыточность на рынке</a> <a class="dl" href="https://mediana-research.com/pr_9.pdf">PDF</a></li>
+      <li><time datetime="2024-02-18">18.02.2024</time> <a href="/pr/2024/02/18">“Сушка” рынка ускорилась и привела к рекордно низкой выживаемости</a> <a class="dl" href="https://mediana-research.com/pr_8.pdf">PDF</a></li>
+      <li><time datetime="2023-12-13">13.12.2023</time> <a href="/pr/2023/12/13">Текущая тенденция - отсутствие притока “новой крови”</a> <a class="dl" href="https://mediana-research.com/pr_7.pdf">PDF</a></li>
+      <li><time datetime="2023-12-12">12.12.2023</time> <a href="/pr/2023/12/12">Индекс Mediana указывает на кризис в индустрии</a> <a class="dl" href="https://mediana-research.com/pr_6.pdf">PDF</a></li>
+      <li><time datetime="2023-11-15">15.11.2023</time> <a href="/pr/2023/11/15">“Сушка” - растет срок жизни игроков рынка</a> <a class="dl" href="https://mediana-research.com/pr_5.pdf">PDF</a></li>
+      <li><time datetime="2023-11-14">14.11.2023</time> <a href="/pr/2023/11/14">По итогам октября рынок вернулся ровно на год назад по количеству работающих проектов</a> <a class="dl" href="https://mediana-research.com/pr_4.pdf">PDF</a></li>
+      <li><time datetime="2023-10-18">18.10.2023</time> <a href="/pr/2023/10/18">Почти треть всех существующих алготрейдинговых проектов работают “в минус”</a> <a class="dl" href="https://mediana-research.com/pr_3.pdf">PDF</a></li>
+      <li><time datetime="2023-10-17">17.10.2023</time> <a href="/pr/2023/10/17">Сентябрь оказался наиболее убыточным месяцем для алготрейдеров за 2,5 года</a> <a class="dl" href="https://mediana-research.com/pr_2.pdf">PDF</a></li>
+      <li><time datetime="2023-09-18">18.09.2023</time> <a href="/pr/2023/09/18">Август оказался рекордным по количеству “умерших” проектов</a> <a class="dl" href="https://mediana-research.com/pr_1.pdf">PDF</a></li>
+    </ul>
+  </section>
+
+  <section class="block" id="table">
+    <div class="head-row">
+      <div>
+        <h2>Сводная таблица проектов</h2>
+        <p class="sub">Данные по проектам из выборки</p>
+      </div>
+      <a class="more" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml">Открыть на весь экран →</a>
     </div>
-    <iframe style="width: 100%; height: 500px" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml?gid=1994855062&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    <div class="sheet">
+      <iframe title="Сводная таблица алготрейдинговых проектов" loading="lazy" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml?gid=1994855062&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <p>Ведёте алготрейдинговый проект? Добавьте его в исследование.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://forms.gle/Hv8HfFhzjxoeM9nX9">Форма для добавления проекта</a>
+        <a class="btn" href="https://t.me/MedianaResearch">Telegram</a>
+      </div>
+    </div>
+    <div class="copy">Mediana Research · исследуем рынок с 2021 года</div>
   </div>
-
-</div>
-
-</div><br>
-
-</div>
-
-<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
-  <a style="background: #332b40!important;" href="https://forms.gle/Hv8HfFhzjxoeM9nX9" class="w3-button w3-black w3-padding-large w3-margin-bottom">Форма для добавления проекта</a>
-  <p><a href="https://t.me/MedianaResearch">telegram</a></p>
 </footer>
 
 </body>
