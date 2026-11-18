@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 HTML_DIR = STATIC_DIR / "html"
 INDEX_FILE = HTML_DIR / "page.html"
+DRAFTS_DIR = BASE_DIR / "drafts"
 
 SITE_URL = "https://mediana-research.com"
 SITE_NAME = "Mediana Research"
@@ -220,6 +221,24 @@ def page_press_release(request: Request, year: str, month: str, day: str) -> Res
         pdf=pdf,
     )
     return html_page(request, HTML_DIR / f"pr{day}{month}{year}.html", head)
+
+
+@app.api_route("/{year}/{month}", methods=["GET", "HEAD"])
+def page_draft(request: Request, year: str, month: str) -> Response:
+    """Standalone HTML research built from the month's CSV (drafts/mediana-research_MMYYYY.html).
+
+    Kept out of search results: the official article for the month is /article/{year}/{month}.
+    """
+    if not re.fullmatch(r"\d{4}", year) or not re.fullmatch(r"0[1-9]|1[0-2]", month):
+        raise HTTPException(status_code=404)
+    period = f"{MONTHS_RU[int(month) - 1]} {year}"
+    head = "\n".join([
+        f"<title>Исследование за {period} | {SITE_NAME}</title>",
+        '<meta name="robots" content="noindex"/>',
+        f'<link rel="canonical" href="{SITE_URL}/article/{year}/{month}"/>',
+        f'<link rel="icon" href="{ICON_URL}" type="image/png" sizes="180x180"/>',
+    ]).encode()
+    return html_page(request, DRAFTS_DIR / f"mediana-research_{month}{year}.html", head)
 
 
 # ---------------------------------------------------------------- robots, sitemap, files
