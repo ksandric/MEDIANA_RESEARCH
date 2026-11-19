@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import gzip
 import hashlib
 import html
 import json
 import re
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from email.utils import formatdate
 from functools import lru_cache
@@ -23,6 +26,8 @@ STATIC_DIR = BASE_DIR / "static"
 HTML_DIR = STATIC_DIR / "html"
 INDEX_FILE = HTML_DIR / "page.html"
 DRAFTS_DIR = BASE_DIR / "drafts"
+EXPLORER_FILE = HTML_DIR / "explorer.html"  # project explorer widget, filled from the newest CSV
+PROJECTS_FILE = HTML_DIR / "projects.html"  # standalone page for the widget: /projects
 
 SITE_URL = "https://mediana-research.com"
 SITE_NAME = "Mediana Research"
@@ -37,6 +42,12 @@ DOWNLOAD_SUFFIXES = {".pdf", ".csv"}
 TITLE_TAG = re.compile(rb"<title>.*?</title>", re.S | re.I)
 HTML_TAG = re.compile(rb"<html(?![^>]*\blang=)", re.I)
 RESEARCH_PDF = re.compile(rf"mediana-research_({'|'.join(MONTHS_EN)})(\d{{4}})\.pdf")
+DATA_CSV = re.compile(r"mediana-research_(0[1-9]|1[0-2])(\d{4})\.csv")
+EXPLORER_MARK = "<!--MX:EXPLORER-->"
+CSV_MARK = "<!--MX:CSV-->"
+SHEET_URL = (
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml"
+)
 PR_LINK = re.compile(r'<a href="/pr/(\d{4})/(\d{2})/(\d{2})">(.*?)</a>(?:.*?/(pr_\d+\.pdf)")?')
 
 NOT_FOUND_PAGE = f"""<!DOCTYPE html>
@@ -56,7 +67,15 @@ NOT_FOUND_PAGE = f"""<!DOCTYPE html>
 </html>
 """
 
-app = FastAPI(title=SITE_NAME, docs_url=None, redoc_url=None, openapi_url=None)
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    # Build "/" and "/projects" once at startup, so the first visitor gets them from the cache.
+    for template in (INDEX_FILE, PROJECTS_FILE):
+        rendered_page(template)
+    yield
+
+
+app = FastAPI(title=SITE_NAME, docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.mount("/static/images", StaticFiles(directory=STATIC_DIR / "images"), name="images")
 
@@ -179,9 +198,94 @@ def html_page(request: Request, path: Path, head: bytes) -> Response:
     return Response(data, media_type="text/html; charset=utf-8", headers=headers)
 
 
+# ---------------------------------------------------------------- project explorer
+
+def latest_csv() -> Optional[Path]:
+    """Newest monthly data file: static/mediana-research_MMYYYY.csv with the latest year and month.
+
+    A new month needs only its CSV dropped into static/: "/" and "/projects" pick it up by themselves.
+    """
+    found = [
+        ((int(m[2]), int(m[1])), f)
+        for f in STATIC_DIR.glob("mediana-research_*.csv")
+        if (m := DATA_CSV.fullmatch(f.name))
+    ]
+    return max(found)[1] if found else None
+
+
+@dataclass(frozen=True)
+class CachedPage:
+    body: bytes
+    gzipped: bytes
+    etag: str
+    modified: str
+
+
+def _signature(*paths: Optional[Path]) -> tuple:
+    """Changes whenever one of the files is edited or replaced: the cache key of a rendered page."""
+    return tuple((p.name, p.stat().st_mtime_ns, p.stat().st_size) for p in paths if p)
+
+
+@lru_cache(maxsize=8)
+def _render(template: Path, csv: Optional[Path], signature: tuple) -> CachedPage:
+    page = template.read_text(encoding="utf-8")
+    if csv:
+        m = DATA_CSV.fullmatch(csv.name)
+        period = f"{MONTHS_RU[int(m[1]) - 1]} {m[2]}"
+        data = csv.read_text(encoding="utf-8-sig").replace("</", "<\\/")  # keep it inside <script>
+        widget = (
+            EXPLORER_FILE.read_text(encoding="utf-8")
+            .replace("{{CSV_NAME}}", csv.name)
+            .replace("{{PERIOD}}", period)
+            .replace(CSV_MARK, data)
+        )
+    else:
+        period = "последний месяц"
+        widget = f'<p><a class="more" href="{SHEET_URL}">Открыть сводную таблицу в Google Таблицах →</a></p>'
+    body = page.replace("{{PERIOD}}", period).replace(EXPLORER_MARK, widget).encode()
+    newest = max(mtime for _, mtime, _ in signature) / 1e9
+    return CachedPage(
+        body=body,
+        gzipped=gzip.compress(body, compresslevel=9, mtime=0),
+        etag='W/"' + hashlib.md5(body).hexdigest() + '"',
+        modified=formatdate(newest, usegmt=True),
+    )
+
+
+def rendered_page(template: Path) -> CachedPage:
+    """Template with the explorer and the newest CSV inside, built once and kept in memory
+    (plain and gzipped) until the template, the widget or the CSV changes."""
+    csv = latest_csv()
+    return _render(template, csv, _signature(template, EXPLORER_FILE, csv))
+
+
+def cached_html(request: Request, template: Path) -> Response:
+    page = rendered_page(template)
+    headers = {
+        "ETag": page.etag,
+        "Last-Modified": page.modified,
+        "Cache-Control": "public, max-age=300",
+        "Vary": "Accept-Encoding",
+    }
+    if page.etag in request.headers.get("if-none-match", ""):
+        return Response(status_code=304, headers=headers)
+    body = page.body
+    if "gzip" in request.headers.get("accept-encoding", ""):
+        body = page.gzipped
+        headers["Content-Encoding"] = "gzip"  # GZipMiddleware leaves encoded responses alone
+    return Response(body, media_type="text/html; charset=utf-8", headers=headers)
+
+
+# ---------------------------------------------------------------- pages (continued)
+
 @app.api_route("/", methods=["GET", "HEAD"])
-def page_index() -> FileResponse:
-    return FileResponse(INDEX_FILE, media_type="text/html; charset=utf-8")
+def page_index(request: Request) -> Response:
+    return cached_html(request, INDEX_FILE)
+
+
+@app.api_route("/projects", methods=["GET", "HEAD"])
+def page_projects(request: Request) -> Response:
+    return cached_html(request, PROJECTS_FILE)
 
 
 @app.api_route("/article/{year}/{month}", methods=["GET", "HEAD"])
@@ -251,6 +355,8 @@ def robots() -> PlainTextResponse:
 @app.api_route("/sitemap.xml", methods=["GET", "HEAD"])
 def sitemap() -> Response:
     pages = [((0, 0, 0), "/", INDEX_FILE)]
+    if csv := latest_csv():
+        pages.append(((0, 0, 0), "/projects", csv))
     for f in HTML_DIR.glob("*.html"):
         if m := re.fullmatch(r"(\d{2})(\d{4})", f.stem):
             pages.append(((int(m[2]), int(m[1]), 0), f"/article/{m[2]}/{m[1]}", f))

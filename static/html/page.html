@@ -137,8 +137,6 @@ h2{margin:0 0 6px;font-size:clamp(26px,3.4vw,34px);line-height:1.15;font-weight:
 .press li>a:not(.dl){font-weight:600;text-decoration:none}
 .press li>a:not(.dl):hover{color:var(--accent);text-decoration:underline}
 
-.sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.sheet iframe{display:block;width:100%;height:560px;border:0;background:#fff}
 .head-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
 .head-row .sub{margin:0}
 .more{font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
@@ -160,7 +158,6 @@ footer{margin-top:80px;color:#fff;background:linear-gradient(160deg,#332b40,#1c1
   .months{grid-template-columns:repeat(2,1fr)}
   .press li{grid-template-columns:1fr auto;gap:4px 12px;padding:14px 16px}
   .press time{grid-column:1/-1}
-  .sheet iframe{height:440px}
   main section.block{padding-top:48px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
@@ -319,13 +316,12 @@ footer{margin-top:80px;color:#fff;background:linear-gradient(160deg,#332b40,#1c1
     <div class="head-row">
       <div>
         <h2>Сводная таблица проектов</h2>
-        <p class="sub">Данные по проектам из выборки</p>
+        <p class="sub">Доходность, риск и выживаемость всех проектов из выборки</p>
       </div>
-      <a class="more" href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml">Открыть на весь экран →</a>
+      <a class="more" href="/projects">Открыть на отдельной странице →</a>
     </div>
-    <div class="sheet">
-      <iframe title="Сводная таблица алготрейдинговых проектов" loading="lazy" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml?gid=1994855062&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
+    <!-- Сервер (run_site.py) подставляет сюда static/html/explorer.html с данными из самого свежего CSV. -->
+    <!--MX:EXPLORER-->
   </section>
 
 </main>

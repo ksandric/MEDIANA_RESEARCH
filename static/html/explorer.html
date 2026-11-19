@@ -1,0 +1,385 @@
+<!-- Project explorer widget. run_site.py inserts it into "/" and "/projects" at the MX:EXPLORER marker
+     and fills in the CSV name, period and CSV text from the newest static/mediana-research_MMYYYY.csv. -->
+<style>
+.mx{
+  --brand:#332b40; --bg:#f6f5f9; --surface:#ffffff; --ink:#1f1a29; --muted:#6d6779; --faint:#a39db0;
+  --line:#e7e3ee; --accent:#6a4cf0; --chip:#f1eef8; --gold:#ffc857;
+  --gain:#0f8b8d; --loss:#e0612f; --zero:#e4e1ea; --closed:#b7b1c2;
+  --shadow:0 1px 2px rgba(31,26,41,.05),0 8px 24px rgba(31,26,41,.06);
+  --font:"Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;
+  display:flex;flex-direction:column;gap:22px;color:var(--ink);font:15px/1.55 var(--font);font-feature-settings:"lnum" 1
+}
+@media (prefers-color-scheme:dark){.mx{
+  --bg:#131019; --surface:#1d1926; --ink:#edeaf4; --muted:#a8a1b6; --faint:#6f687d;
+  --line:#2e283a; --accent:#ab98ff; --chip:#292335; --gain:#3cbfb4; --loss:#f08a5d; --zero:#2f2a3a; --closed:#5a5368;
+  --shadow:none}}
+.mx *{box-sizing:border-box}
+.mx .num{font-variant-numeric:tabular-nums}
+.mx .mx-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);min-width:0}
+.mx .mx-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap;margin-bottom:16px}
+.mx h3{margin:0;font-size:20px;line-height:1.25;font-weight:800;text-wrap:balance}
+.mx .mx-sub{margin:4px 0 0;color:var(--muted);max-width:62ch;font-size:14px}
+.mx .mx-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mx .mx-kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.mx .mx-kpi b{display:block;font-size:30px;line-height:1.1;font-weight:800}
+.mx .mx-kpi span{display:block;margin-top:4px;color:var(--muted);font-size:13px;line-height:1.35}
+.mx .mx-kpi.key{background:linear-gradient(140deg,#ffd77e,#ffc857);border-color:transparent}
+.mx .mx-kpi.key b,.mx .mx-kpi.key span{color:#332b40}
+.mx .mx-seg{display:inline-flex;background:var(--chip);border-radius:999px;padding:3px}
+.mx .mx-seg button{border:0;background:transparent;color:var(--muted);font:700 12px var(--font);letter-spacing:.03em;padding:6px 12px;border-radius:999px;cursor:pointer}
+.mx .mx-seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mx button:focus-visible,.mx input:focus-visible,.mx a:focus-visible,.mx tr:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mx .mx-legend{display:flex;gap:16px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:12px;font-weight:600}
+.mx .mx-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.mx .mx-ramp{display:inline-flex;align-items:center;gap:6px}
+.mx .mx-ramp .bar{width:120px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--loss),var(--zero),var(--gain))}
+.mx #mx-pulse{display:block;width:100%;height:110px}
+.mx .mx-years{position:relative;height:18px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.mx .mx-years span{position:absolute;top:0;border-left:1px solid var(--line);padding-left:4px;height:18px}
+.mx #mx-heat{display:block;width:100%;cursor:pointer;border-radius:4px}
+.mx .mx-note{margin:10px 0 0;color:var(--muted);font-size:13px}
+.mx .mx-note a{color:var(--accent);font-weight:700}
+.mx #mx-scatter{display:block;width:100%;height:auto;overflow:visible}
+.mx #mx-scatter .pt{cursor:pointer;stroke:var(--surface);stroke-width:1.5}
+.mx #mx-scatter .pt:hover,.mx #mx-scatter .pt.hl{stroke:var(--ink);stroke-width:2}
+.mx .axis text{fill:var(--muted);font:600 11px var(--font)}
+.mx .axis line{stroke:var(--line)}
+.mx .mx-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mx .mx-tools input{font:600 14px var(--font);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;width:220px;max-width:100%}
+.mx .mx-tbl{overflow-x:auto;margin:0 -22px;padding:0 22px}
+.mx table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+.mx th{text-align:right;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--surface);cursor:pointer;white-space:nowrap;user-select:none}
+.mx th:first-child,.mx td:first-child{text-align:left}
+.mx th[aria-sort="descending"]::after{content:" ↓"}
+.mx th[aria-sort="ascending"]::after{content:" ↑"}
+.mx td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.mx td.name{white-space:normal;font-weight:700;max-width:300px}
+.mx tbody tr{cursor:pointer;transition:background .12s}
+.mx tbody tr:hover{background:var(--chip)}
+.mx .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:999px;background:var(--chip);color:var(--muted);margin-left:8px;vertical-align:1px}
+.mx .pill.on{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.mx .pos{color:var(--gain)} .mx .neg{color:var(--loss)}
+.mx .mx-more{margin-top:14px;border:1px solid var(--line);background:transparent;color:var(--accent);font:700 14px var(--font);padding:9px 16px;border-radius:10px;cursor:pointer}
+.mx #mx-tip{position:fixed;z-index:20;left:0;top:0;pointer-events:none;background:var(--ink);color:var(--surface);border-radius:10px;padding:8px 11px;font-size:12px;line-height:1.45;max-width:260px;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .08s}
+.mx #mx-tip b{display:block;font-size:13px}
+.mx #mx-tip .k{opacity:.7}
+.mx dialog{border:0;border-radius:20px;padding:0;width:min(760px,calc(100vw - 32px));max-height:calc(100vh - 48px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.mx dialog::backdrop{background:rgba(19,16,25,.55)}
+.mx .mx-dlg{padding:24px;display:flex;flex-direction:column;gap:18px}
+.mx .mx-dlg-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.mx .mx-dlg-head a{color:var(--accent);font-weight:700;font-size:13px;text-decoration:none}
+.mx .mx-x{border:0;background:var(--chip);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.mx .mx-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mx .mx-stats div{background:var(--bg);border-radius:12px;padding:10px 12px}
+.mx .mx-stats b{display:block;font-size:18px;font-weight:800}
+.mx .mx-stats span{font-size:12px;color:var(--muted)}
+.mx .mx-dlg svg{display:block;width:100%;height:auto;overflow:visible}
+.mx .mx-dlg h4{margin:0 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:760px){.mx .mx-kpis,.mx .mx-stats{grid-template-columns:repeat(2,1fr)}}
+@media (prefers-reduced-motion:reduce){.mx *{transition:none!important}}
+</style>
+
+<div class="mx" id="mx">
+  <div class="mx-kpis" id="mx-kpis"></div>
+
+  <section class="mx-card">
+    <div class="mx-head">
+      <div>
+        <h3>Карта рынка</h3>
+        <p class="mx-sub">Каждая строка — проект, каждый столбец — месяц. Цвет — доходность за месяц. Лестница слева — приток новых проектов, обрывы строк — закрытия.</p>
+      </div>
+      <div class="mx-seg" id="mx-heat-sort" role="group" aria-label="Сортировка строк">
+        <button type="button" aria-pressed="true" data-k="start">По дате входа</button>
+        <button type="button" aria-pressed="false" data-k="total">По доходности</button>
+        <button type="button" aria-pressed="false" data-k="life">По сроку жизни</button>
+      </div>
+    </div>
+    <div class="mx-legend" style="margin-bottom:12px">
+      <span><i style="background:var(--accent);border-radius:2px"></i>Проектов в работе</span>
+      <span class="mx-ramp num">−20% <span class="bar"></span> +20% за месяц</span>
+    </div>
+    <svg id="mx-pulse" aria-label="Число проектов в работе по месяцам"></svg>
+    <div class="mx-years" id="mx-years"></div>
+    <canvas id="mx-heat" aria-label="Тепловая карта доходности проектов по месяцам"></canvas>
+    <p class="mx-note">Серые ячейки — месяц около нуля. Пустота — проекта ещё нет в выборке или он закрыт.</p>
+  </section>
+
+  <section class="mx-card">
+    <div class="mx-head">
+      <div>
+        <h3>Риск и доходность</h3>
+        <p class="mx-sub">Чем выше точка, тем больше средняя месячная доходность. Чем правее, тем глубже падал капитал. Размер — срок жизни.</p>
+      </div>
+      <div class="mx-legend">
+        <span><i style="background:var(--accent)"></i>Работает</span>
+        <span><i style="background:var(--closed)"></i>Закрыт</span>
+      </div>
+    </div>
+    <svg id="mx-scatter" aria-label="Диаграмма риск-доходность"></svg>
+  </section>
+
+  <section class="mx-card">
+    <div class="mx-head">
+      <div>
+        <h3>Все проекты</h3>
+        <p class="mx-sub">Сортировка по клику на заголовок. Кривая — рост капитала за весь срок жизни.</p>
+      </div>
+      <div class="mx-tools">
+        <div class="mx-seg" id="mx-filter" role="group" aria-label="Фильтр">
+          <button type="button" aria-pressed="true" data-k="active">Работают</button>
+          <button type="button" aria-pressed="false" data-k="closed">Закрыты</button>
+          <button type="button" aria-pressed="false" data-k="all">Все</button>
+        </div>
+        <input id="mx-q" type="search" placeholder="Поиск проекта" aria-label="Поиск проекта">
+      </div>
+    </div>
+    <div class="mx-tbl">
+      <table>
+        <thead id="mx-thead"><tr>
+          <th data-k="name">Проект</th>
+          <th data-k="life">Месяцев</th>
+          <th data-k="total" aria-sort="descending">Общая доходность</th>
+          <th data-k="avgM">В среднем за мес.</th>
+          <th data-k="dd">Max просадка*</th>
+          <th data-k="worst">Худший месяц</th>
+          <th data-k="eq" style="cursor:default">Кривая капитала</th>
+        </tr></thead>
+        <tbody id="mx-tbody"></tbody>
+      </table>
+    </div>
+    <button type="button" class="mx-more" id="mx-more" hidden>Показать все</button>
+    <p class="mx-note">* Просадка рассчитана по помесячным данным, поэтому может быть меньше реальной внутримесячной.<br>
+      Данные: <a href="/{{CSV_NAME}}">CSV за {{PERIOD}}</a> · <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml">Google Таблица</a></p>
+  </section>
+
+  <div id="mx-tip" role="status"></div>
+  <dialog id="mx-dlg"><div class="mx-dlg" id="mx-dlg-body"></div></dialog>
+</div>
+
+<script type="text/plain" id="mx-csv"><!--MX:CSV--></script>
+<script>
+(() => {
+"use strict";
+const ROOT = document.getElementById("mx");
+const $ = s => document.querySelector(s);
+const css = n => getComputedStyle(ROOT).getPropertyValue(n).trim();
+const MON = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const MON_FULL = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+const MON_IN = ["январе","феврале","марте","апреле","мае","июне","июле","августе","сентябре","октябре","ноябре","декабре"];
+const fmt = (v, d=1, sign=true) => v == null ? "—" : (sign && v > 0 ? "+" : "") + v.toLocaleString("ru-RU",{minimumFractionDigits:d,maximumFractionDigits:d}).replace("-", "−") + "%";
+const cls = v => v == null ? "" : v > 0 ? "pos" : v < 0 ? "neg" : "";
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function parseCSV(t){
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<t.length;i++){
+    const c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"') q=true;
+    else if(c===','){ row.push(f); f=""; }
+    else if(c==='\n'){ row.push(f); rows.push(row); row=[]; f=""; }
+    else if(c!=='\r') f+=c;
+  }
+  if(f||row.length){ row.push(f); rows.push(row); }
+  return rows;
+}
+const num = s => { if(s==null) return null; s=s.replace(/[\s ]/g,"").replace(",","."); if(!s||s==="-"||s[0]==="#") return null; const n=parseFloat(s); return isNaN(n)?null:n; };
+
+// Columns are found by header text, so older CSV layouts still parse.
+function build(text){
+  const rows=parseCSV(text), head=rows[0].map(h=>h.toLowerCase());
+  const col=(...keys)=>head.findIndex(h=>keys.some(k=>h.includes(k)));
+  const M0=head.findIndex(h=>/^\d{2}\.\d{2}$/.test(h.trim()));
+  const mHead=head.slice(M0).filter(h=>/^\d{2}\.\d{2}$/.test(h.trim()));
+  const months=mHead.map(s=>{const [m,y]=s.trim().split(".");return {m:+m-1,y:2000+ +y};});
+  const N=months.length;
+  const c={life:col("срок жизни"),mean:col("реднеарифметический"),mdd:col("max просадка"),total:col("общая доходность"),avgM:col("среднемесячная"),best:col("лучший"),worst:col("худший"),sharpe:col("шарп")};
+  const get=(r,k)=>c[k]<0?null:num(r[c[k]]);
+  const avgRow=rows.find(r=>(r[1]||"").trim().toLowerCase().startsWith("среднее"))||[];
+  const avg=months.map((_,i)=>num(avgRow[M0+i]));
+  const P=[];
+  rows.slice(1).forEach(r=>{
+    const name=(r[0]||"").trim();
+    if(!name) return;
+    const ret=months.map((_,i)=>num(r[M0+i]));
+    const first=ret.findIndex(v=>v!=null);
+    if(first<0) return;
+    let last=N-1; while(ret[last]==null) last--;
+    let e=1, peak=1, dd=0; const eq=[]; let n=0, sum=0;
+    for(let i=first;i<=last;i++){ const v=ret[i]; if(v!=null){ e*=Math.max(0,1+v/100); n++; sum+=v; } eq.push(e); peak=Math.max(peak,e); dd=Math.min(dd,e/peak-1); }
+    const vals=ret.filter(v=>v!=null);
+    P.push({id:P.length,name,url:(r[1]||"").trim(),
+      life:get(r,"life")??(last-first+1), mean:get(r,"mean")??sum/n, mdd:get(r,"mdd"),
+      total:get(r,"total")??(e-1)*100, avgM:get(r,"avgM"), best:get(r,"best")??Math.max(...vals),
+      worst:get(r,"worst")??Math.min(...vals), sharpe:get(r,"sharpe"),
+      ret,first,last,eq,dd:dd*100,active:last===N-1});
+  });
+  return {months,N,avg,P};
+}
+
+function init(D){
+  const {months,N,avg,P}=D;
+  const mLabel=i=>`${MON[months[i].m]} ${months[i].y}`;
+  const mLong=i=>`${MON_FULL[months[i].m]} ${months[i].y}`;
+  const agg=months.map((_,i)=>{
+    let n=0,pos=0,born=0,died=0;
+    for(const p of P){ const v=p.ret[i]; if(v!=null){n++; if(v>0) pos++;} if(p.first===i) born++; if(p.last===i-1) died++; }
+    return {n,pos,born,died,avg:avg[i]};
+  });
+  const L=N-1, last=agg[L], lm=months[L].m;
+  const active=P.filter(p=>p.active);
+  const lead=$("#mx-lead");
+  if(lead) lead.textContent=`${P.length} проектов, ${N} месяцев наблюдений: с ${mLong(0)} по ${mLong(L)}. Наведите на ячейку или точку, кликните, чтобы открыть карточку проекта.`;
+  $("#mx-kpis").innerHTML=[
+    ["key",active.length,`проектов работают в ${MON_IN[lm]} ${months[L].y}`],
+    ["",(last.n?Math.round(last.pos/last.n*100):0)+"%",`закрыли ${MON_FULL[lm]} в плюсе`],
+    ["",fmt(last.avg),`средняя доходность за ${MON_FULL[lm]}`],
+    ["",P.length-active.length,`проектов закрылись за ${N} мес.`]
+  ].map(([k,b,s])=>`<div class="mx-kpi ${k}"><b class="num">${b}</b><span>${s}</span></div>`).join("");
+
+  // tooltip
+  const tip=$("#mx-tip");
+  const showTip=(e,html)=>{tip.innerHTML=html;tip.style.opacity=1;const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;tip.style.left=x+"px";tip.style.top=y+"px";};
+  const hideTip=()=>{tip.style.opacity=0;};
+
+  // diverging color scale
+  let C={};
+  const readColors=()=>{C={gain:css("--gain"),loss:css("--loss"),zero:css("--zero"),accent:css("--accent"),ink:css("--ink"),line:css("--line"),closed:css("--closed")};};
+  const hex=h=>{h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16));};
+  const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+  const color=v=>{const z=hex(C.zero);if(Math.abs(v)<0.5)return `rgb(${z})`;const t=Math.min(1,Math.sqrt(Math.abs(v)/20));return `rgb(${mix(z,hex(v>0?C.gain:C.loss),.25+.75*t)})`;};
+
+  // pulse strip + heatmap (same x grid)
+  const pulse=$("#mx-pulse"), heat=$("#mx-heat"), years=$("#mx-years");
+  let order=[], sortKey="start", hoverRow=-1;
+  const sorters={
+    start:(a,b)=>a.first-b.first||a.last-b.last,
+    total:(a,b)=>(b.total??-1e9)-(a.total??-1e9),
+    life:(a,b)=>b.life-a.life||a.first-b.first
+  };
+  function drawPulse(){
+    const W=pulse.clientWidth,H=110,cw=W/N,max=Math.max(1,...agg.map(a=>a.n));
+    let s=`<g class="axis">`;
+    [0,50,100,150,200].filter(v=>v<=max).forEach(v=>{const y=H-4-(v/max)*(H-22);s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}"/><text x="2" y="${y-3}">${v}</text>`;});
+    s+=`</g>`;
+    agg.forEach((a,i)=>{const h=(a.n/max)*(H-22),x=i*cw+1,w=Math.max(1,cw-2);s+=`<rect x="${x}" y="${H-4-h}" width="${w}" height="${h}" rx="${Math.min(2,w/2)}" fill="${i===L?C.gain:C.accent}" opacity="${i===L?1:.85}"/>`;});
+    pulse.setAttribute("viewBox",`0 0 ${W} ${H}`); pulse.innerHTML=s;
+    years.innerHTML=months.map((m,i)=>m.m===0||i===0?`<span style="left:${(i/N*100).toFixed(2)}%">${m.y}</span>`:"").join("");
+  }
+  pulse.addEventListener("mousemove",e=>{const r=pulse.getBoundingClientRect(),i=Math.min(N-1,Math.max(0,Math.floor((e.clientX-r.left)/r.width*N))),a=agg[i];
+    showTip(e,`<b>${mLong(i)}</b>В работе: ${a.n}<br>Новых: ${a.born} · закрылось: ${a.died}<br>В плюсе: ${a.n?Math.round(a.pos/a.n*100):0}%<br><span class="k">Средняя доходность:</span> ${fmt(a.avg)}`);});
+  pulse.addEventListener("mouseleave",hideTip);
+
+  function drawHeat(){
+    order=[...P].sort(sorters[sortKey]);
+    const W=heat.clientWidth, rh=W<600?2:3, H=order.length*rh, dpr=devicePixelRatio||1;
+    heat.width=W*dpr; heat.height=H*dpr; heat.style.height=H+"px";
+    const g=heat.getContext("2d"); g.scale(dpr,dpr); g.clearRect(0,0,W,H);
+    const cw=W/N;
+    order.forEach((p,r)=>{for(let i=p.first;i<=p.last;i++){const v=p.ret[i];g.fillStyle=v==null?C.line:color(v);g.fillRect(i*cw,r*rh,Math.max(1,cw-.6),rh-(rh>2?.5:0));}});
+    if(hoverRow>=0){g.strokeStyle=C.ink;g.lineWidth=1.2;const p=order[hoverRow];g.strokeRect(p.first*cw+.5,hoverRow*rh-.5,(p.last-p.first+1)*cw-1,rh+1);}
+    heat._m={cw,rh};
+  }
+  const heatPick=e=>{const r=heat.getBoundingClientRect(),{cw,rh}=heat._m;return {row:Math.floor((e.clientY-r.top)/rh),col:Math.floor((e.clientX-r.left)/cw)};};
+  heat.addEventListener("mousemove",e=>{const {row,col}=heatPick(e),p=order[row];if(!p){hideTip();return;}
+    if(row!==hoverRow){hoverRow=row;drawHeat();}
+    const v=p.ret[col], inLife=col>=p.first&&col<=p.last;
+    showTip(e,`<b>${esc(p.name)}</b>${inLife?`${mLong(col)}: <strong>${fmt(v)}</strong><br>`:`<span class="k">${mLong(col)}: нет в выборке</span><br>`}<span class="k">Общая доходность:</span> ${fmt(p.total)}<br><span class="k">В выборке:</span> ${mLabel(p.first)} — ${p.active?"сейчас":mLabel(p.last)}`);});
+  heat.addEventListener("mouseleave",()=>{hoverRow=-1;hideTip();drawHeat();});
+  heat.addEventListener("click",e=>{const p=order[heatPick(e).row];if(p)openCard(p);});
+  $("#mx-heat-sort").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;sortKey=b.dataset.k;[...e.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));drawHeat();});
+
+  // risk / return scatter
+  const sc=$("#mx-scatter");
+  function drawScatter(){
+    const W=Math.max(320,sc.clientWidth||sc.parentNode.clientWidth),H=Math.round(Math.min(460,Math.max(300,W*.5))),m={l:44,r:14,t:12,b:38};
+    const Y0=-10,Y1=20,X1=100;
+    const x=v=>m.l+(Math.min(X1,-v)/X1)*(W-m.l-m.r), y=v=>m.t+(1-(Math.max(Y0,Math.min(Y1,v))-Y0)/(Y1-Y0))*(H-m.t-m.b);
+    let s=`<g class="axis">`;
+    for(let v=Y0;v<=Y1;v+=5) s+=`<line x1="${m.l}" x2="${W-m.r}" y1="${y(v)}" y2="${y(v)}" ${v===0?'style="stroke:var(--faint)"':''}/><text x="${m.l-8}" y="${y(v)+4}" text-anchor="end">${v>0?"+":""}${v}%</text>`;
+    for(let v=0;v<=X1;v+=20) s+=`<text x="${x(-v)}" y="${H-m.b+18}" text-anchor="middle">${v?"−"+v:0}%</text>`;
+    s+=`<text x="${W-m.r}" y="${H-4}" text-anchor="end">Максимальная просадка →</text></g>`;
+    s+=`<text x="${m.l+10}" y="${m.t+16}" style="fill:var(--muted);font:700 11px var(--font);letter-spacing:.06em">↖ ДОХОДНЕЕ И СПОКОЙНЕЕ</text>`;
+    [...P].filter(p=>p.mean!=null).sort((a,b)=>(a.active-b.active)||(b.life-a.life)).forEach(p=>{
+      const r=2.5+Math.sqrt(p.life)*1.1;
+      s+=`<circle class="pt" data-id="${p.id}" cx="${x(p.dd).toFixed(1)}" cy="${y(p.mean).toFixed(1)}" r="${r.toFixed(1)}" fill="${p.active?C.accent:C.closed}" fill-opacity="${p.active?.85:.6}"/>`;});
+    sc.setAttribute("viewBox",`0 0 ${W} ${H}`); sc.innerHTML=s;
+  }
+  sc.addEventListener("mousemove",e=>{const c=e.target.closest(".pt");if(!c){hideTip();return;}const p=P[+c.dataset.id];
+    showTip(e,`<b>${esc(p.name)}</b><span class="k">Средняя за месяц:</span> ${fmt(p.mean,2)}<br><span class="k">Max просадка:</span> ${fmt(p.dd)}<br><span class="k">Срок:</span> ${p.life} мес. · ${p.active?"работает":"закрыт"}`);});
+  sc.addEventListener("mouseleave",hideTip);
+  sc.addEventListener("click",e=>{const c=e.target.closest(".pt");if(c)openCard(P[+c.dataset.id]);});
+
+  // table
+  let tKey="total",tDir=-1,tFilter="active",tAll=false;
+  const spark=p=>{const w=110,h=26,e=p.eq.map(v=>Math.log(Math.max(v,.005)));const mn=Math.min(...e),mx=Math.max(...e),rg=mx-mn||1;
+    const yy=v=>(h-3-(v-mn)/rg*(h-6)).toFixed(1);
+    const pts=e.map((v,i)=>`${(e.length<2?w/2:i/(e.length-1)*w).toFixed(1)},${yy(v)}`);const end=pts[pts.length-1].split(",");
+    const c=p.eq[p.eq.length-1]>=1?C.gain:C.loss;
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><line x1="0" x2="${w}" y1="${yy(0)}" y2="${yy(0)}" stroke="${C.line}" stroke-dasharray="2 2" ${0<mn||0>mx?'opacity="0"':''}/><polyline points="${pts.join(" ")}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/><circle cx="${end[0]}" cy="${end[1]}" r="2.5" fill="${c}"/></svg>`;};
+  function drawTable(){
+    const q=$("#mx-q").value.trim().toLowerCase();
+    const rows=P.filter(p=>(tFilter==="all"||(tFilter==="active")===p.active)&&(!q||p.name.toLowerCase().includes(q)));
+    rows.sort((a,b)=>{const A=a[tKey],B=b[tKey];if(tKey==="name")return tDir*A.localeCompare(B,"ru");return tDir*((A??-1e9)-(B??-1e9));});
+    const lim=tAll||q?rows.length:25;
+    $("#mx-tbody").innerHTML=rows.slice(0,lim).map(p=>`<tr data-id="${p.id}" tabindex="0"><td class="name">${esc(p.name)}${p.active?'<span class="pill on">работает</span>':`<span class="pill">до ${mLabel(p.last)}</span>`}</td><td class="num">${p.life}</td><td class="num ${cls(p.total)}">${fmt(p.total,0)}</td><td class="num ${cls(p.avgM)}">${fmt(p.avgM,2)}</td><td class="num">${fmt(p.dd,0)}</td><td class="num ${cls(p.worst)}">${fmt(p.worst)}</td><td>${spark(p)}</td></tr>`).join("")||`<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px">Ничего не найдено. Попробуйте другое название или фильтр «Все».</td></tr>`;
+    const b=$("#mx-more");b.hidden=rows.length<=lim;b.textContent=`Показать все ${rows.length}`;
+    ROOT.querySelectorAll("th").forEach(th=>th.dataset.k===tKey?th.setAttribute("aria-sort",tDir<0?"descending":"ascending"):th.removeAttribute("aria-sort"));
+  }
+  $("#mx-thead").addEventListener("click",e=>{const th=e.target.closest("th");if(!th||th.dataset.k==="eq")return;const k=th.dataset.k;if(k===tKey)tDir*=-1;else{tKey=k;tDir=k==="name"?1:-1;}drawTable();});
+  $("#mx-filter").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;tFilter=b.dataset.k;tAll=false;[...e.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));drawTable();});
+  $("#mx-q").addEventListener("input",drawTable);
+  $("#mx-more").addEventListener("click",()=>{tAll=true;drawTable();});
+  const tb=$("#mx-tbody");
+  tb.addEventListener("click",e=>{const tr=e.target.closest("tr[data-id]");if(tr)openCard(P[+tr.dataset.id]);});
+  tb.addEventListener("keydown",e=>{if(e.key==="Enter"){const tr=e.target.closest("tr[data-id]");if(tr)openCard(P[+tr.dataset.id]);}});
+  tb.addEventListener("mouseover",e=>{const tr=e.target.closest("tr[data-id]");sc.querySelectorAll(".pt.hl").forEach(c=>c.classList.remove("hl"));if(tr){const c=sc.querySelector(`.pt[data-id="${tr.dataset.id}"]`);if(c){c.classList.add("hl");c.parentNode.appendChild(c);}}});
+
+  // project card
+  const dlg=$("#mx-dlg");
+  function openCard(p){
+    hideTip();
+    const ms=[];for(let i=p.first;i<=p.last;i++)ms.push(i);
+    let a=100,b=100;const pe=[100],me=[100];
+    ms.forEach(i=>{a*=Math.max(0,1+(p.ret[i]??0)/100);b*=1+(avg[i]??0)/100;pe.push(a);me.push(b);});
+    const W=700,H=220,m={l:52,r:84,t:12,b:26};
+    const lg=v=>Math.log(Math.max(v,1)), all=[...pe,...me].map(lg);
+    const mn=Math.min(...all),mx=Math.max(...all),rg=mx-mn||1;
+    const X=k=>m.l+k/Math.max(1,ms.length)*(W-m.l-m.r),Y=v=>m.t+(1-(lg(v)-mn)/rg)*(H-m.t-m.b);
+    const line=arr=>arr.map((v,k)=>`${X(k).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+    const ticks=[1,2,5,10,20,50,100,200,500,1000,2000,5000,10000,20000].filter(v=>lg(v)>=mn-.01&&lg(v)<=mx+.01);
+    let s=`<g class="axis">${ticks.map(v=>`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(v)}" y2="${Y(v)}" ${v===100?'style="stroke:var(--faint)"':''}/><text x="${m.l-8}" y="${Y(v)+4}" text-anchor="end">${v.toLocaleString("ru-RU")}</text>`).join("")}`;
+    const step=Math.ceil(ms.length/6);
+    ms.forEach((i,k)=>{if(k%step===0)s+=`<text x="${X(k+.5)}" y="${H-6}" text-anchor="middle">${mLabel(i)}</text>`;});
+    s+=`</g><polyline points="${line(me)}" fill="none" stroke="var(--faint)" stroke-width="2" stroke-dasharray="4 3"/><polyline points="${line(pe)}" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round"/>`;
+    const ep=pe[pe.length-1],em=me[me.length-1];
+    let yp=Y(ep),ym=Y(em);if(Math.abs(yp-ym)<16){if(yp<ym){yp-=8;ym+=8;}else{yp+=8;ym-=8;}}
+    s+=`<circle cx="${X(ms.length)}" cy="${Y(ep)}" r="4" fill="var(--accent)" stroke="var(--surface)" stroke-width="2"/><text x="${X(ms.length)+8}" y="${yp+4}" style="fill:var(--ink);font:800 12px var(--font)">${Math.round(ep).toLocaleString("ru-RU")}</text><text x="${X(ms.length)+8}" y="${ym+4}" style="fill:var(--muted);font:600 11px var(--font)">рынок ${Math.round(em)}</text>`;
+    const BH=120,bm={l:52,r:84,t:8,b:8},vals=ms.map(i=>p.ret[i]),lim=Math.min(60,Math.max(5,...vals.map(v=>Math.abs(v??0))));
+    const bw=(W-bm.l-bm.r)/ms.length,mid=bm.t+(BH-bm.t-bm.b)/2,k_=(BH-bm.t-bm.b)/2/lim;
+    let bs=`<g class="axis"><line x1="${bm.l}" x2="${W-bm.r}" y1="${mid}" y2="${mid}" style="stroke:var(--faint)"/><text x="${bm.l-8}" y="${bm.t+8}" text-anchor="end">+${Math.round(lim)}%</text><text x="${bm.l-8}" y="${BH-bm.b}" text-anchor="end">−${Math.round(lim)}%</text></g>`;
+    vals.forEach((v,k)=>{if(v==null)return;const h=Math.max(1,Math.min(lim,Math.abs(v))*k_);bs+=`<rect x="${(bm.l+k*bw+Math.min(1,bw*.15)).toFixed(1)}" y="${(v>=0?mid-h:mid).toFixed(1)}" width="${Math.max(1,bw-Math.min(2,bw*.3)).toFixed(1)}" height="${h.toFixed(1)}" rx="${Math.min(2,bw/3)}" fill="${color(v>=0?Math.max(v,8):Math.min(v,-8))}"><title>${mLong(ms[k])}: ${fmt(v)}</title></rect>`;});
+    const st=[["Срок жизни",`${p.life} мес.`],["Общая доходность",fmt(p.total,0)],["В среднем за месяц",fmt(p.avgM,2)],["Max просадка",fmt(p.mdd??p.dd,1)],["Лучший месяц",fmt(p.best)],["Худший месяц",fmt(p.worst)],["Коэф. Шарпа",p.sharpe==null?"—":p.sharpe.toLocaleString("ru-RU")],["Статус",p.active?"Работает":`Закрыт, ${mLabel(p.last)}`]];
+    let link="";
+    try{ if(/^https?:\/\//.test(p.url)) link=`<a href="${esc(p.url)}" target="_blank" rel="noopener nofollow">Мониторинг: ${esc(new URL(p.url).hostname.replace(/^www\./,""))} ↗</a>`; }catch(_){}
+    const short=p.name.length>32?p.name.slice(0,30)+"…":p.name;
+    $("#mx-dlg-body").innerHTML=`<div class="mx-dlg-head"><div><h3>${esc(p.name)}</h3>${link}</div><button type="button" class="mx-x" id="mx-x" aria-label="Закрыть">×</button></div>
+      <div class="mx-stats">${st.map(([k,v])=>`<div><b class="num">${v}</b><span>${k}</span></div>`).join("")}</div>
+      <div><h4>Рост 100 вложенных единиц</h4><div class="mx-legend" style="margin-bottom:6px"><span><i style="background:var(--accent)"></i>${esc(short)}</span><span><i style="background:var(--faint)"></i>Средний проект выборки за те же месяцы</span></div><svg viewBox="0 0 ${W} ${H}">${s}</svg></div>
+      <div><h4>Доходность по месяцам</h4><svg viewBox="0 0 ${W} ${BH}">${bs}</svg></div>`;
+    $("#mx-x").onclick=()=>dlg.close();
+    dlg.showModal();
+  }
+  dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close();});
+
+  const all=()=>{readColors();drawPulse();drawHeat();drawScatter();drawTable();};
+  all();
+  let t, w=innerWidth;
+  addEventListener("resize",()=>{if(innerWidth===w)return;w=innerWidth;clearTimeout(t);t=setTimeout(all,120);});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change",all);
+}
+
+const text=$("#mx-csv").textContent.replace(/<\\\//g,"</").trim();
+if(text) init(build(text));
+})();
+</script>

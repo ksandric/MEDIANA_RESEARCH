@@ -146,6 +146,8 @@
 
 Актуальные данные и параметры по всем 210+ проектам из выборки доступны в интерактивном формате:
 
+👉 **[Карта рынка, риск и доходность, рейтинг проектов](https://mediana-research.com/projects)**. Страница строится сама из самого свежего CSV в `static/`.
+
 👉 **[Открыть сводную таблицу в Google Таблицах](https://docs.google.com/spreadsheets/d/e/2PACX-1vR04aAelBkYuAAWPwcN1cY5gu_8yQ8EDbyBoEe1xPfObbaO0bMUUlx6DkuHLsNLUCX9azVcsImTVXxf/pubhtml)**
 
 ---
