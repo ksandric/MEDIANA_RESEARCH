@@ -419,4 +419,5 @@ def download(filename: str) -> FileResponse:
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080, access_log=False)
+    # Local only: the site is reached through nginx (nginx/default.conf), never on :8080 directly.
+    uvicorn.run(app, host="127.0.0.1", port=8080, access_log=False)
