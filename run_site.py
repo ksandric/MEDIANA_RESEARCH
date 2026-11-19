@@ -17,7 +17,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exception_handlers import http_exception_handler
 from fastapi.middleware.gzip import GZipMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -40,6 +40,7 @@ MONTHS_EN = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct
 
 DOWNLOAD_SUFFIXES = {".pdf", ".csv"}
 TITLE_TAG = re.compile(rb"<title>.*?</title>", re.S | re.I)
+DESCRIPTION_TAG = re.compile(rb'<meta\s+name="description"[^>]*>\s*', re.I)
 HTML_TAG = re.compile(rb"<html(?![^>]*\blang=)", re.I)
 RESEARCH_PDF = re.compile(rf"mediana-research_({'|'.join(MONTHS_EN)})(\d{{4}})\.pdf")
 DATA_CSV = re.compile(r"mediana-research_(0[1-9]|1[0-2])(\d{4})\.csv")
@@ -167,12 +168,44 @@ def research_pdf(year: str, month: str) -> Optional[str]:
     return name if (STATIC_DIR / name).is_file() else None
 
 
+def research_draft(year: str, month: str) -> Path:
+    return DRAFTS_DIR / f"mediana-research_{month}{year}.html"
+
+
+def research_path(year: str, month: str) -> Optional[str]:
+    """Address of a month's research page.
+
+    From August 2026 on a month is an HTML research in drafts/ and lives at /{year}/{month};
+    earlier months are pdf2htmlEX exports at /article/{year}/{month}.
+    """
+    if research_draft(year, month).is_file():
+        return f"/{year}/{month}"
+    if (HTML_DIR / f"{month}{year}.html").is_file():
+        return f"/article/{year}/{month}"
+    return None
+
+
+def research_head(year: str, month: str) -> bytes:
+    period = f"{MONTHS_RU[int(month) - 1]} {year}"
+    return seo_head(
+        title=f"Алготрейдинг криптовалют: исследование рынка за {period} | {SITE_NAME}",
+        headline=f"Рынок алгоритмического трейдинга криптовалют: исследование за {period}",
+        description=(
+            f"Исследование {SITE_NAME} «Рынок алгоритмического трейдинга криптовалют» за {period}: "
+            "доходность, убыточность и выживаемость алготрейдинговых проектов, индекс MEDIANA. "
+            "Отчёт в PDF и данные в CSV."
+        ),
+        path=research_path(year, month) or f"/article/{year}/{month}",
+        pdf=research_pdf(year, month),
+    )
+
+
 def pdf_canonical(name: str) -> Optional[str]:
     """HTML page a PDF duplicates, so search engines index the page, not the file."""
     if m := RESEARCH_PDF.fullmatch(name):
         month = f"{MONTHS_EN.index(m[1]) + 1:02d}"
-        if (HTML_DIR / f"{month}{m[2]}.html").is_file():
-            return f"{SITE_URL}/article/{m[2]}/{month}"
+        if path := research_path(m[2], month):
+            return SITE_URL + path
     for (y, mo, d), (_, pdf) in press_releases().items():
         if pdf == name:
             return f"{SITE_URL}/pr/{y}/{mo}/{d}"
@@ -191,6 +224,8 @@ def html_page(request: Request, path: Path, head: bytes) -> Response:
         return Response(status_code=304, headers=headers)
 
     data = path.read_bytes()
+    if b'name="description"' in head:
+        data = DESCRIPTION_TAG.sub(b"", data)  # the head brings its own
     data, replaced = TITLE_TAG.subn(lambda _: head, data, count=1)
     if not replaced:
         data = data.replace(b"</head>", head + b"\n</head>", 1)
@@ -292,19 +327,10 @@ def page_projects(request: Request) -> Response:
 def page_article(request: Request, year: str, month: str) -> Response:
     if not re.fullmatch(r"\d{4}", year) or not re.fullmatch(r"0[1-9]|1[0-2]", month):
         raise HTTPException(status_code=404)
-    period = f"{MONTHS_RU[int(month) - 1]} {year}"
-    head = seo_head(
-        title=f"Алготрейдинг криптовалют: исследование рынка за {period} | {SITE_NAME}",
-        headline=f"Рынок алгоритмического трейдинга криптовалют: исследование за {period}",
-        description=(
-            f"Исследование {SITE_NAME} «Рынок алгоритмического трейдинга криптовалют» за {period}: "
-            "доходность, убыточность и выживаемость алготрейдинговых проектов, индекс MEDIANA. "
-            "Отчёт в PDF и данные в CSV."
-        ),
-        path=f"/article/{year}/{month}",
-        pdf=research_pdf(year, month),
-    )
-    return html_page(request, HTML_DIR / f"{month}{year}.html", head)
+    if research_draft(year, month).is_file():
+        # The month moved to /{year}/{month}: old links and search results follow it.
+        return RedirectResponse(f"/{year}/{month}", status_code=301)
+    return html_page(request, HTML_DIR / f"{month}{year}.html", research_head(year, month))
 
 
 @app.api_route("/pr/{year}/{month}/{day}", methods=["GET", "HEAD"])
@@ -328,21 +354,14 @@ def page_press_release(request: Request, year: str, month: str, day: str) -> Res
 
 
 @app.api_route("/{year}/{month}", methods=["GET", "HEAD"])
-def page_draft(request: Request, year: str, month: str) -> Response:
-    """Standalone HTML research built from the month's CSV (drafts/mediana-research_MMYYYY.html).
+def page_research(request: Request, year: str, month: str) -> Response:
+    """Month's research: standalone HTML built from the month's CSV (drafts/mediana-research_MMYYYY.html).
 
-    Kept out of search results: the official article for the month is /article/{year}/{month}.
+    The main address of every month from August 2026 on; /article/{year}/{month} redirects here.
     """
     if not re.fullmatch(r"\d{4}", year) or not re.fullmatch(r"0[1-9]|1[0-2]", month):
         raise HTTPException(status_code=404)
-    period = f"{MONTHS_RU[int(month) - 1]} {year}"
-    head = "\n".join([
-        f"<title>Исследование за {period} | {SITE_NAME}</title>",
-        '<meta name="robots" content="noindex"/>',
-        f'<link rel="canonical" href="{SITE_URL}/article/{year}/{month}"/>',
-        f'<link rel="icon" href="{ICON_URL}" type="image/png" sizes="180x180"/>',
-    ]).encode()
-    return html_page(request, DRAFTS_DIR / f"mediana-research_{month}{year}.html", head)
+    return html_page(request, research_draft(year, month), research_head(year, month))
 
 
 # ---------------------------------------------------------------- robots, sitemap, files
@@ -357,8 +376,11 @@ def sitemap() -> Response:
     pages = [((0, 0, 0), "/", INDEX_FILE)]
     if csv := latest_csv():
         pages.append(((0, 0, 0), "/projects", csv))
+    for f in DRAFTS_DIR.glob("mediana-research_*.html"):
+        if m := re.fullmatch(r"mediana-research_(0[1-9]|1[0-2])(\d{4})", f.stem):
+            pages.append(((int(m[2]), int(m[1]), 0), f"/{m[2]}/{m[1]}", f))
     for f in HTML_DIR.glob("*.html"):
-        if m := re.fullmatch(r"(\d{2})(\d{4})", f.stem):
+        if (m := re.fullmatch(r"(\d{2})(\d{4})", f.stem)) and not research_draft(m[2], m[1]).is_file():
             pages.append(((int(m[2]), int(m[1]), 0), f"/article/{m[2]}/{m[1]}", f))
         elif m := re.fullmatch(r"pr(\d{2})(\d{2})(\d{4})", f.stem):
             pages.append(((int(m[3]), int(m[2]), int(m[1])), f"/pr/{m[3]}/{m[2]}/{m[1]}", f))

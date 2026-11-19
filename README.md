@@ -50,7 +50,7 @@
 
 | Месяц | Аналитическая статья | Отчёт (PDF) | Данные (CSV) |
 | :--- | :---: | :---: | :---: |
-| **Август 2026** *(новое)* | [Читать онлайн](https://mediana-research.com/article/2026/08) | [📄 PDF](https://mediana-research.com/mediana-research_aug2026.pdf) | [📊 CSV](https://mediana-research.com/mediana-research_082026.csv) |
+| **Август 2026** *(новое)* | [Читать онлайн](https://mediana-research.com/2026/08) | [📄 PDF](https://mediana-research.com/mediana-research_aug2026.pdf) | [📊 CSV](https://mediana-research.com/mediana-research_082026.csv) |
 | **Июль 2026** | [Читать онлайн](https://mediana-research.com/article/2026/07) | [📄 PDF](https://mediana-research.com/mediana-research_jul2026.pdf) | [📊 CSV](https://mediana-research.com/mediana-research_072026.csv) |
 | **Июнь 2026** | [Читать онлайн](https://mediana-research.com/article/2026/06) | [📄 PDF](https://mediana-research.com/mediana-research_jun2026.pdf) | [📊 CSV](https://mediana-research.com/mediana-research_062026.csv) |
 | **Май 2026** | [Читать онлайн](https://mediana-research.com/article/2026/05) | [📄 PDF](https://mediana-research.com/mediana-research_may2026.pdf) | [📊 CSV](https://mediana-research.com/mediana-research_052026.csv) |

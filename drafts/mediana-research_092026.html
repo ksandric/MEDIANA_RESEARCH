@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Исследование · Сентябрь 2026</title>
+<meta name="description" content="Mediana Research: рынок алгоритмического трейдинга криптовалют, итоги сентября 2026 года — выживаемость, доходность, Индекс MEDIANA, срок жизни и убыточность проектов.">
+<style>
+:root{
+  --bg:#f6f5f9; --surface:#ffffff; --surface-2:#f1eef8; --border:#e7e3ee;
+  --ink:#1c1725; --ink-2:#4a4357; --ink-3:#6d6779; --brand:#332b40; --accent:#ffc857;
+  --s1:#6250d6; --s2:#eb6834; --s1-soft:#e4e0fa; --s2-soft:#fbe1d6;
+  --grid:#ebe8f0; --axis:#a8a1b6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141019; --surface:#1c1725; --surface-2:#251f30; --border:#332b40;
+    --ink:#f1eef8; --ink-2:#c9c3d6; --ink-3:#a8a1b6; --brand:#f1eef8; --accent:#ffc857;
+    --s1:#9085e9; --s2:#d95926; --s1-soft:#2e2950; --s2-soft:#3d2418;
+    --grid:#2a2433; --axis:#6d6779;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141019; --surface:#1c1725; --surface-2:#251f30; --border:#332b40;
+  --ink:#f1eef8; --ink-2:#c9c3d6; --ink-3:#a8a1b6; --brand:#f1eef8; --accent:#ffc857;
+  --s1:#9085e9; --s2:#d95926; --s1-soft:#2e2950; --s2-soft:#3d2418;
+  --grid:#2a2433; --axis:#6d6779;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px 64px}
+header.cover{background:#332b40;color:#f1eef8;padding:48px 0 40px;margin-bottom:32px}
+header.cover .wrap{padding-bottom:0}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#332b40;background:var(--accent);padding:3px 10px;border-radius:4px;font-weight:600}
+header h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:16px 0 8px;font-weight:700}
+header .sub{font-size:18px;color:#d7d1e4;margin:0}
+header .meta{font-size:14px;color:#a8a1b6;margin-top:20px}
+h2{font-size:26px;line-height:1.25;margin:56px 0 12px;color:var(--brand)}
+h2 .n{color:var(--ink-3);font-weight:500;margin-right:8px}
+h3{font-size:18px;margin:28px 0 8px}
+p{margin:0 0 14px;color:var(--ink-2)}
+p strong,li strong{color:var(--ink)}
+.lead{font-size:18px;color:var(--ink)}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 24px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.tile .k{font-size:13px;color:var(--ink-3);line-height:1.3;min-height:34px}
+.tile .v{font-size:30px;font-weight:700;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tile .d{font-size:13px;color:var(--ink-3);margin-top:6px}
+.up::before{content:"▲ ";font-size:10px;vertical-align:2px}
+.dn::before{content:"▼ ";font-size:10px;vertical-align:2px}
+.box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin:20px 0}
+.box.key{border-left:4px solid var(--accent)}
+.box h3{margin-top:0}
+.box ul{margin:0;padding-left:20px}
+.box li{margin:6px 0;color:var(--ink-2)}
+.method{background:var(--surface-2);border-radius:10px;padding:16px 20px;font-size:14px;margin:16px 0}
+.method p{font-size:14px;margin-bottom:8px}
+.method p:last-child{margin-bottom:0}
+figure{margin:20px 0 28px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 18px 12px}
+figure .ft{font-weight:600;font-size:15px;color:var(--ink);margin:0 0 2px}
+figure .fs{font-size:13px;color:var(--ink-3);margin:0 0 10px}
+figure svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ink-2);margin:0 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.line{height:3px;border-radius:2px}
+.sw.dash{height:0;border-top:2px dashed var(--s2);background:none !important}
+figcaption{font-size:12px;color:var(--ink-3);margin-top:8px}
+details{margin-top:6px;font-size:13px}
+details summary{cursor:pointer;color:var(--ink-3)}
+.tbl-wrap{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--ink-3);font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+td{color:var(--ink-2)}
+tr.total td{font-weight:700;color:var(--ink)}
+.tick text,.lbl{fill:var(--ink-3);font-size:11px}
+.dl{fill:var(--ink);font-size:12px;font-weight:600}
+.grid line{stroke:var(--grid);stroke-width:1}
+.base{stroke:var(--axis);stroke-width:1}
+#tip{position:fixed;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,.15);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.4;opacity:0;transition:opacity .08s;z-index:10;max-width:280px}
+#tip b{display:block;font-size:12px;color:var(--ink-3);font-weight:500}
+.hit{fill:transparent;cursor:crosshair}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--border);font-size:13px;color:var(--ink-3)}
+footer a,.wrap a{color:var(--s1)}
+@media (max-width:700px){
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .tile .v{font-size:24px}
+  h2{font-size:22px;margin-top:44px}
+  figure{padding:14px 12px 10px}
+}
+@media print{
+  body{background:#fff}
+  figure,.box,.tile{break-inside:avoid}
+  details{display:none}
+}
+</style>
+</head>
+<body>
+<header class="cover">
+  <div class="wrap">
+    <span class="eyebrow">Mediana Research · Исследование</span>
+    <h1>Сентябрь 2026</h1>
+    <p class="sub">Рынок алгоритмического трейдинга криптовалют</p>
+    <p class="meta">65 месяцев наблюдений · май 2021 — сентябрь 2026 · 216 проектов в выборке</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<p>В основу исследования легли данные из публичных и частично публичных мониторингов алготрейдинговых проектов, которые привлекают инвесторов через системы копирования, протокол API и передачу средств в доверительное управление. В исследуемую группу попали более 210 проектов — при условии, что достоверно известно о подключении к ним хотя бы одного инвестора за время наблюдения и подключение открыто для других участников рынка. Для сравнения в группу включены также несколько крупных игроков фондового рынка и Forex. Исследование ведётся с мая 2021 года.</p>
+<p>Mediana Research — исследовательская компания, изучающая рынок алгоритмического трейдинга более 6 лет. В основу исследований ложатся исключительно проверенные данные из открытых источников.</p>
+
+<div class="tiles">
+  <div class="tile"><div class="k">«Смертей» за месяц</div><div class="v">13</div><div class="d"><span class="dn"></span>антирекорд за всю историю</div></div>
+  <div class="tile"><div class="k">Индекс MEDIANA (баланс из 1000$)</div><div class="v">643,15$</div><div class="d"><span class="dn"></span>−24,9% за месяц · −35,7% с начала</div></div>
+  <div class="tile"><div class="k">Работающих проектов</div><div class="v">37</div><div class="d">из 216 · выживаемость 17,1%</div></div>
+  <div class="tile"><div class="k">Среднерыночная доходность за сентябрь</div><div class="v">+1,4%</div><div class="d">медиана +0,4%</div></div>
+</div>
+
+<div class="box key">
+  <h3>Главное за месяц</h3>
+  <ul>
+    <li><strong>Рекордная «смертность».</strong> За сентябрь рынок покинули 13 проектов — больше, чем в любой другой месяц за 65 месяцев Исследований (предыдущий антирекорд — 9 в июле 2026). Работающих проектов осталось 37 — новый исторический минимум.</li>
+    <li><strong>Индекс MEDIANA обвалился на 24,9%</strong> — до 643,15$. Это самое резкое месячное падение и минимальное значение Индекса за весь ряд опубликованных значений. Августовский отскок полностью перечёркнут.</li>
+    <li><strong>Рынок покидают «ветераны».</strong> Средний срок жизни проектов, «умерших» в сентябре, — 38 месяцев, почти вдвое больше обычного. Среди них — проект, работавший с мая 2021 года, и 8 проектов с положительной итоговой доходностью.</li>
+    <li><strong>Доходность осталась положительной, но слабой.</strong> Среднерыночная доходность — +1,4%, медиана — +0,4%. Прибыль показал 21 проект из 37, убыток — 14.</li>
+    <li><strong>Выборка пополнилась</strong> двумя проектами — впервые за год. Один из них пополнил опустевшую в августе группу проектов младше года.</li>
+  </ul>
+</div>
+
+<h2><span class="n">01</span>Общие сведения</h2>
+<p>Исследуемая группа проектов за месяц выросла до <strong>216 шт.</strong>: в неё добавлены два проекта, данные которых внесены с начала их публичного мониторинга. Это первое пополнение выборки с сентября 2025 года. Поиск новых проектов продолжается на постоянной основе; заявку на добавление проекта можно оставить через <a href="https://forms.gle/Hv8HfFhzjxoeM9nX9">форму</a>.</p>
+<p class="lead">Августовская передышка оказалась короткой. Сентябрь принёс рынку алготрейдинга рекордную «смертность», новый минимум по количеству работающих проектов и обвал Индекса MEDIANA. Положительная среднерыночная доходность не смогла компенсировать потери: кризис, развивающийся с апреля 2024 года, перешёл в наиболее острую фазу за всю историю Исследований.</p>
+
+<div class="method">
+  <p><strong>Об уточнении данных за прошлые месяцы.</strong> Новые проекты вносятся в таблицу вместе с историей доходности, поэтому средние показатели прошлых месяцев на графиках могут немного отличаться от опубликованных ранее. Так, среднерыночная доходность за август с учётом двух новых проектов составляет +14,4% вместо +13,7%. Ранее опубликованные значения Индекса MEDIANA не пересчитываются.</p>
+</div>
+
+<h2><span class="n">02</span>Выживаемость на рынке алготрейдинга</h2>
+<p>В сентябре рынок пережил <strong>рекордную волну «смертей»</strong>: работу прекратили сразу 13 проектов. Количество работающих проектов сократилось с 50 до <strong>37</strong> — это минимум за всю историю Исследований. Для сравнения: на пике, в июле 2023 года, их было 134.</p>
+
+<figure id="f-alive">
+  <p class="ft">Количество работающих проектов по месяцам</p>
+  <p class="fs">Проекты, по которым есть данные за месяц, шт.</p>
+  <div class="chart"></div>
+  <details><summary>Показать данные</summary><div class="tbl-wrap" data-table="alive"></div></details>
+</figure>
+
+<p>Вторая волна «вымирания», начавшаяся в августе 2024 года, резко ускорилась. За девять месяцев 2026 года рынок покинули уже <strong>38 проектов</strong> — в полтора раза больше, чем за весь 2025 год (24). При сохранении темпа 2026 год может стать рекордным по числу «смертей» (в 2023 и 2024 годах — по 47). Нулевая «смертность» августа оказалась паузой, а не переломом тенденции.</p>
+
+<figure id="f-deaths">
+  <p class="ft">«Смерти» проектов по месяцам</p>
+  <p class="fs">Проекты, прекратившие работу в течение месяца, шт.</p>
+  <div class="chart"></div>
+  <details><summary>Показать данные</summary><div class="tbl-wrap" data-table="deaths"></div></details>
+</figure>
+
+<p>Особенность сентябрьской волны — её состав. Рынок покидают не только молодые и убыточные проекты:</p>
+<ul>
+  <li>средний срок жизни «умерших» в сентябре — <strong>38 месяцев</strong> при среднем 21 месяц для всех «умерших»;</li>
+  <li><strong>8 из 13</strong> проектов на момент остановки имели положительную итоговую доходность, у трёх она превышала +250%;</li>
+  <li>среди выбывших — проект, работавший все <strong>64 месяца</strong> наблюдений, и два проекта старше 4 лет.</li>
+</ul>
+<p>Также «умер» проект Diva-HighR, на который мы обращали внимание в августовском выпуске: после двух месяцев нулевой доходности торги так и не возобновились.</p>
+
+<p>По итогам <strong>65 месяцев</strong> Исследования «выжили» <strong>17,1%</strong> проектов — 37 из 216. Оставшиеся <strong>82,9%</strong> (179 проектов) «умерли»: были удалены мониторинги, остановлены торги либо получена ликвидация. Доля выживших опустилась ниже 20% впервые за всю историю Исследований.</p>
+
+<figure id="f-cum">
+  <p class="ft">Проекты нарастающим итогом: всего, работающие и «умершие»</p>
+  <p class="fs">Шт., на конец месяца</p>
+  <div class="legend">
+    <span><i class="sw line" style="background:var(--ink-3)"></i>Всего в выборке</span>
+    <span><i class="sw line" style="background:var(--s1)"></i>Работающие</span>
+    <span><i class="sw line" style="background:var(--s2)"></i>«Умершие»</span>
+  </div>
+  <div class="chart"></div>
+</figure>
+
+<p>В зоне риска на октябрь — <strong>Turing by Triple AI</strong> и <strong>Shlorik Stablefi</strong>: оба проекта второй месяц подряд показывают нулевую доходность. Если торги не возобновятся, по методологии (3 месяца без торгов) они будут отнесены к «умершим».</p>
+
+<h2><span class="n">03</span>Доходность на рынке алготрейдинга</h2>
+<p>Среднерыночная доходность без учёта «смертности» в сентябре составила <strong>+1,4%</strong>. Это второй прибыльный месяц подряд, однако после сильного августа (+14,4%) рост практически остановился.</p>
+<p>Средний показатель доходности за 65 месяцев составил <strong>+3,5%</strong> и остаётся ниже уровня 4% с ноября 2025 года.</p>
+
+<figure id="f-avg">
+  <p class="ft">Среднерыночная доходность по месяцам</p>
+  <p class="fs">Среднее арифметическое месячной доходности работающих проектов, %</p>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--s1)"></i>Прибыльный месяц</span>
+    <span><i class="sw" style="background:var(--s2)"></i>Убыточный месяц</span>
+  </div>
+  <div class="chart"></div>
+  <details><summary>Показать данные</summary><div class="tbl-wrap" data-table="avg"></div></details>
+</figure>
+
+<h3>Насколько широким был рост</h3>
+<p>Прибыль в сентябре показал <strong>21 проект из 37</strong> (57%), убыток — 14, ещё 2 завершили месяц с нулевым результатом. Медианная доходность — <strong>+0,4%</strong>: типичный проект месяц фактически завершил «в ноль».</p>
+<p>Положительное среднее во многом обеспечено одним результатом: новый проект показал +30,6%. Без него среднерыночная доходность составила бы лишь +0,6%. Многие августовские лидеры в сентябре ушли в минус — у четырёх из них потери составили от 4% до 16%.</p>
+
+<figure id="f-dist">
+  <p class="ft">Доходность каждого работающего проекта за сентябрь 2026</p>
+  <p class="fs">37 проектов, отсортированы по доходности, %. Наведите на столбец, чтобы увидеть проект</p>
+  <div class="legend">
+    <span><i class="sw line" style="background:var(--ink)"></i>Среднее +1,4%</span>
+    <span><i class="sw line" style="background:var(--ink-3)"></i>Медиана +0,4%</span>
+  </div>
+  <div class="chart"></div>
+</figure>
+
+<h2><span class="n">04</span>Индекс MEDIANA</h2>
+<p>Индекс MEDIANA в сентябре <strong>обвалился на 24,9%</strong>. Исходный баланс в 1000$, работая в Индексе, на текущий момент составляет <strong>643,15$</strong> — значение Индекса <strong>−35,7%</strong> против −14,3% месяцем ранее. Это минимальное значение и самое резкое месячное падение за весь ряд опубликованных значений Индекса.</p>
+<p>Падение полностью обусловлено рекордной «смертностью»: при условной «ликвидации» долей 13 проектов положительная среднерыночная доходность (+1,4%) не смогла его компенсировать. Это наглядно показывает разницу между «средней доходностью рынка» и реальным результатом инвестора, который распределил капитал по рынку: доходность выживших не учитывает потерь от выбывших.</p>
+<p>Индекс находится в отрицательной зоне пятый месяц подряд и всё дальше уходит от нисходящей трендовой (оранжевая линия), зародившейся в январе 2025 года: её уровень на сентябрь — около 884$. С начала 2026 года Индекс потерял <strong>42,3%</strong>, тогда как среднерыночная доходность за тот же период в сложном проценте составила около +13%.</p>
+
+<figure id="f-idx">
+  <p class="ft">Индекс MEDIANA</p>
+  <p class="fs">Баланс исходных 1000$, инвестированных в Индекс 1 апреля 2022 года, $</p>
+  <div class="legend">
+    <span><i class="sw line" style="background:var(--s1)"></i>Индекс MEDIANA</span>
+    <span><i class="sw dash"></i>Нисходящий тренд с января 2025</span>
+    <span><i class="sw line" style="background:var(--axis)"></i>Исходный баланс 1000$</span>
+  </div>
+  <div class="chart"></div>
+  <details><summary>Показать данные</summary><div class="tbl-wrap" data-table="idx"></div></details>
+</figure>
+
+<div class="method">
+  <p><strong>Как считается Индекс.</strong> Индекс MEDIANA отражает эффективность всех проектов накопительным итогом, условно работающих на исходном балансе в 1000$, инвестированном 1 апреля 2022 года. Баланс разделён на равные доли, каждая из которых зарабатывает или теряет в соответствии с месячным результатом проекта. Если проект «умирает», его доля условно «ликвидируется». Таким образом Индекс отражает положение дел на рынке в целом.</p>
+  <p>Значения до августа 2026 года включительно взяты из опубликованных выпусков Исследования; значение за сентябрь рассчитано по данным месячного файла. Два новых проекта участвуют в расчёте с сентября.</p>
+</div>
+
+<h2><span class="n">05</span>Срок жизни проектов</h2>
+<p>Сентябрьская волна «смертей» затронула почти все возрастные группы:</p>
+<ul>
+  <li>Сильнее всего пострадала группа <strong>«2–3 года»</strong> — количество работающих проектов в ней сократилось вдвое, с 12 до 6.</li>
+  <li>В группах <strong>«4–5 лет»</strong> и <strong>«более 5 лет»</strong> также появились новые «умершие» — продолжение тенденции, замеченной летом: «старение» больше не гарантирует выживания.</li>
+  <li>Группа <strong>«до 1 года»</strong> снова не пуста — в неё вошёл новый проект выборки.</li>
+  <li>Среди «умерших» по-прежнему с большим отрывом лидирует группа <strong>«1–2 года»</strong> — 68 проектов.</li>
+</ul>
+
+<figure id="f-life">
+  <p class="ft">Проекты по сроку жизни</p>
+  <p class="fs">Количество работающих и «умерших» проектов в каждой группе, шт.</p>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--s1)"></i>Работающие</span>
+    <span><i class="sw" style="background:var(--s2)"></i>«Умершие»</span>
+  </div>
+  <div class="chart"></div>
+</figure>
+
+<p>Средний срок жизни «умерших» проектов вырос с 20 до <strong>21 месяца</strong> — за счёт выбывания возрастных проектов. Средний срок жизни работающих проектов вырос до <strong>45,5 месяца</strong>.</p>
+<p>Связь срока жизни и надёжности сохраняется, хотя и ослабевает: среди проектов старше 4 лет работают 19 из 27 (70%, месяцем ранее — 80%), тогда как среди проектов, проживших меньше 2 лет, — лишь 5 из 119 (4%).</p>
+
+<h2><span class="n">06</span>Потенциально убыточные проекты</h2>
+<p>Доля потенциально убыточных среди работающих проектов резко снизилась — до <strong>10,8%</strong>, это 4 из 37 (в августе — 9 из 48). Однако это не признак оздоровления рынка: 5 из 13 «умерших» в сентябре проектов работали «в минус» и выбыли вместе со своими результатами. Среди «умерших» доля убыточных составляет <strong>29,6%</strong> — 53 из 179.</p>
+
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>Срок жизни</th><th>Работают</th><th>Из них «в минус»</th><th>Доля</th><th>«Умерли»</th><th>Из них «в минус»</th><th>Доля</th></tr></thead>
+  <tbody id="neg-body"></tbody>
+</table>
+</div>
+
+<p style="margin-top:16px">Наибольшая доля убыточных теперь в группе <strong>«3–4 года»</strong> — 2 из 7 проектов. В группе «1–2 года» «в минус» работает 1 из 4. В группах «2–3 года» и «4–5 лет» убыточных проектов не осталось. Высокие доли в отдельных группах во многом объясняются эффектом малой базы.</p>
+
+<div class="method">
+  <p><strong>Методика.</strong> Для выявления потенциальной убыточности используется показатель «среднемесячная доходность»: общая доходность (при неизменном балансе и с учётом сложного процента), делённая на количество месяцев работы. Проекты условно делятся на две группы: работают «в плюс» — среднемесячная доходность выше 0; работают «в минус» — ниже 0.</p>
+</div>
+
+<h2><span class="n">07</span>Заключение</h2>
+<p>Сентябрь стал одним из самых тяжёлых месяцев за всю историю Исследований. Рекордные 13 «смертей», минимальное число работающих проектов (37), выживаемость ниже 20% и обвал Индекса MEDIANA до 643,15$ показывают, что кризис индустрии не только не завершился, но и углубился. Августовский рост оказался кратковременным отскоком.</p>
+<p>Тревожным сигналом стал состав выбывших: рынок покидают зрелые, в том числе прибыльные проекты, работавшие по три–пять лет. Положительная среднерыночная доходность сохраняется, однако она отражает результат лишь «выживших» и не учитывает потерь инвесторов в выбывших проектах. Признаками стабилизации стали бы несколько месяцев подряд с низкой «смертностью», рост числа новых проектов и возвращение Индекса к трендовой.</p>
+<p>Mediana Research продолжит публиковать аналогичные и иные исследования и статистические данные наблюдаемой группы проектов, а также пополнять её новыми игроками при условии их публичности и соответствия критериям, указанным в начале материала.</p>
+
+<footer>
+  <p>Данные, представленные в материале, могут быть использованы публично при указании цитаты и ссылки на источник.</p>
+  <p>Источник данных: <a href="https://mediana-research.com/mediana-research_092026.csv">mediana-research_092026.csv</a> · <a href="https://mediana-research.com/">mediana-research.com</a> · <a href="https://t.me/MedianaResearch">t.me/MedianaResearch</a></p>
+</footer>
+</main>
+
+
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = {"months": ["05.21", "06.21", "07.21", "08.21", "09.21", "10.21", "11.21", "12.21", "01.22", "02.22", "03.22", "04.22", "05.22", "06.22", "07.22", "08.22", "09.22", "10.22", "11.22", "12.22", "01.23", "02.23", "03.23", "04.23", "05.23", "06.23", "07.23", "08.23", "09.23", "10.23", "11.23", "12.23", "01.24", "02.24", "03.24", "04.24", "05.24", "06.24", "07.24", "08.24", "09.24", "10.24", "11.24", "12.24", "01.25", "02.25", "03.25", "04.25", "05.25", "06.25", "07.25", "08.25", "09.25", "10.25", "11.25", "12.25", "01.26", "02.26", "03.26", "04.26", "05.26", "06.26", "07.26", "08.26", "09.26"], "alive": [32, 37, 38, 41, 44, 45, 47, 48, 53, 60, 62, 68, 72, 73, 76, 79, 88, 96, 101, 99, 108, 116, 118, 122, 123, 128, 135, 130, 126, 128, 126, 124, 116, 110, 110, 105, 103, 98, 91, 90, 90, 88, 89, 89, 90, 86, 86, 85, 90, 89, 90, 87, 81, 76, 75, 74, 72, 70, 70, 66, 61, 58, 49, 50, 37], "deaths": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 1, 0, 1, 2, 3, 8, 1, 1, 6, 1, 7, 2, 0, 9, 4, 3, 7, 6, 9, 8, 1, 6, 4, 6, 8, 1, 0, 3, 1, 0, 0, 4, 1, 1, 0, 1, 0, 3, 7, 5, 1, 1, 2, 2, 0, 4, 5, 3, 9, 0, 13], "cum": [32, 38, 39, 42, 45, 46, 48, 49, 54, 61, 63, 69, 75, 81, 85, 88, 98, 108, 116, 122, 132, 141, 149, 154, 162, 169, 176, 180, 180, 185, 190, 194, 195, 197, 198, 199, 201, 202, 203, 203, 203, 204, 206, 206, 207, 207, 208, 208, 213, 213, 214, 214, 215, 215, 215, 215, 215, 215, 215, 215, 215, 215, 215, 216, 216], "avg": [6.2, 10.4, 2.9, 2.9, 9.2, 6.1, 0.1, -3.3, 1.9, 6.5, 10.8, -1.8, 4.9, 2.5, 8.8, -1.5, -0.5, 3.5, 8.3, -0.1, 14.0, 2.0, 8.9, 2.3, -3.4, 6.9, -1.2, 2.4, -4.6, 9.8, 3.9, 14.8, 1.7, 28.8, 11.5, -0.9, 4.3, -2.4, 1.8, 0.3, 2.9, 1.0, 21.0, 1.9, 0.8, -6.1, -1.5, 4.1, 2.2, -2.9, 8.3, 10.6, -0.4, -0.5, -0.8, -4.6, 8.9, -1.0, -2.1, -2.1, -1.1, -1.3, -3.3, 14.4, 1.4], "idx": [["11.23", 813.83], ["12.23", 912.3], ["01.24", 853.63], ["02.24", 1052.38], ["03.24", 1287.75], ["04.24", 1187.19], ["05.24", 1165.6], ["06.24", 1037.85], ["07.24", 924.96], ["08.24", 882.05], ["09.24", 945.5], ["10.24", 951.11], ["11.24", 1250.79], ["12.24", 1250.38], ["01.25", 1241.64], ["02.25", 1131.14], ["03.25", 1096.7], ["04.25", 1133.26], ["05.25", 1179.65], ["06.25", 1167.99], ["07.25", 1243.0], ["08.25", 1333.2], ["09.25", 1213.14], ["10.25", 1162.9], ["11.25", 1132.7], ["12.25", 1115.17], ["01.26", 1148.79], ["02.26", 1127.64], ["03.26", 1102.19], ["04.26", 1085.44], ["05.26", 991.54], ["06.26", 929.96], ["07.26", 753.69], ["08.26", 856.83], ["09.26", 643.15]], "trend": [["01.25", 1286.77], ["02.25", 1266.61], ["03.25", 1246.46], ["04.25", 1226.3], ["05.25", 1206.15], ["06.25", 1186.0], ["07.25", 1165.84], ["08.25", 1145.69], ["09.25", 1125.53], ["10.25", 1105.38], ["11.25", 1085.22], ["12.25", 1065.07], ["01.26", 1044.92], ["02.26", 1024.76], ["03.26", 1004.61], ["04.26", 984.45], ["05.26", 964.3], ["06.26", 944.15], ["07.26", 923.99], ["08.26", 903.84], ["09.26", 883.68]], "life": [{"g": "до 1 года", "alive": 1, "dead": 46, "aliveNeg": 0, "deadNeg": 19}, {"g": "1–2 года", "alive": 4, "dead": 68, "aliveNeg": 1, "deadNeg": 21}, {"g": "2–3 года", "alive": 6, "dead": 43, "aliveNeg": 0, "deadNeg": 9}, {"g": "3–4 года", "alive": 7, "dead": 14, "aliveNeg": 2, "deadNeg": 2}, {"g": "4–5 лет", "alive": 10, "dead": 5, "aliveNeg": 0, "deadNeg": 1}, {"g": "более 5 лет", "alive": 9, "dead": 3, "aliveNeg": 1, "deadNeg": 1}], "aug": [["PHOENIX by hamster-bot Стратегия №2", 30.59], ["Tangey Daniel E Hubner", 13.83], ["SYNDICATE (ex SYNDICATE Midas)", 13.25], ["SAVINSKYI PROFIT RANGE S1", 11.03], ["Crypto Hunter (ex. Nikola-Tesla CryptoHunter)", 10.26], ["Tomas Vasseur", 6.54], ["Trend Team Trading", 5.73], ["AlgocratAI Crypto Portfolio", 5.63], ["Algotoria Diversified (ex. MIXED)", 4.34], ["Ed Khan MultiKnife", 2.41], ["Selim Boukezouh", 2.15], ["PHOENIX by hamster-bot BYBIT", 2.12], ["PHOENIX by hamster-bot", 2.1], ["Delta - Nexus Strategy", 1.96], ["Meritocracy", 1.74], ["Ed Khan Knife Catcher D1", 1.64], ["NewYorkSherri White Waters", 1.58], ["PHOENIX by hamster-bot Binance", 1.37], ["Edvi trade Lion", 0.43], ["Jeppe Kirk Bonde", 0.34], ["Alfa-Quant Capital", 0.2], ["Turing by Triple AI", 0.0], ["Shlorik Stablefi", 0.0], ["IQ Security Fund ICE LAB", -0.48], ["Antonio Emanuele Fasciani", -0.59], ["IQ Security Fund Long Term", -0.62], ["Jay Smith (ex. Jay Edward Smith)", -0.73], ["Algotoria EV (ex. Algotoria USDT)", -1.73], ["ARM VIP PAMM", -2.12], ["ARM TICKMILL VIP FUND", -2.94], ["BITRONIX LINX", -3.86], ["ARM CRYPTO", -4.31], ["IQ Security Fund Trend", -4.49], ["Zohar_Z GOLD WAY (ex. Основной ,ex. Counter Trend Index Lite, ex. HARE KRISHNA)", -8.16], ["Quant Hill Crypto Trend USDT", -9.24], ["Edvi trade Wolf", -10.91], ["BITRONIX BIT ENERGY (ex. Algo Capital BIT ENERGY)", -15.98]], "stats": {"r_aug": -0.24938400000000002, "idx_aug": 643.15, "median": 0.43, "lifeAlive": 45.513513513513516, "lifeDead": 21.11731843575419, "meanAvg": 3.5153846153846153, "trendAug": 883.68, "slope": -20.154064935064937, "mean": 1.4345945945945946}};
+const RU_M = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+const mlabel = m => RU_M[+m.slice(0,2)-1] + ' ' + m.slice(3);
+const mfull = m => ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'][+m.slice(0,2)-1] + ' 20' + m.slice(3);
+const fmt = (v, d=1) => v.toLocaleString('ru-RU',{minimumFractionDigits:d,maximumFractionDigits:d});
+const sgn = (v, d=1) => (v>0?'+':v<0?'−':'') + fmt(Math.abs(v), d);
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+const tip = document.getElementById('tip');
+function showTip(ev, html){tip.innerHTML=html;tip.style.opacity=1;const r=tip.getBoundingClientRect();let x=ev.clientX+14,y=ev.clientY+14;if(x+r.width>innerWidth-8)x=ev.clientX-r.width-14;if(y+r.height>innerHeight-8)y=ev.clientY-r.height-14;tip.style.left=x+'px';tip.style.top=y+'px';}
+function hideTip(){tip.style.opacity=0;}
+
+function niceTicks(min,max,n=5){const span=max-min;const step0=span/n;const mag=Math.pow(10,Math.floor(Math.log10(step0)));const step=[1,2,5,10].map(s=>s*mag).find(s=>span/s<=n)||10*mag;const lo=Math.floor(min/step)*step,hi=Math.ceil(max/step)*step;const t=[];for(let v=lo;v<=hi+1e-9;v+=step)t.push(+v.toFixed(6));return t;}
+
+function frame(container, H=280){
+  const W = Math.max(320, container.clientWidth || 800);
+  const narrow = W < 520;
+  const m = {t:12, r:narrow?12:20, b:28, l:narrow?40:48};
+  const svg = el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},container);
+  return {svg,W,H,m,narrow,iw:W-m.l-m.r,ih:H-m.t-m.b};
+}
+function yAxis(f, ticks, y, suffix=''){
+  const g=el('g',{class:'grid'},f.svg);
+  ticks.forEach(t=>{el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(t),y2:y(t)},g);const tx=el('text',{x:f.m.l-8,y:y(t)+4,'text-anchor':'end',class:'lbl'},f.svg);tx.textContent=fmt(t,0)+suffix;});
+}
+function xMonthLabels(f, months, x, every){
+  months.forEach((m,i)=>{ if(m.startsWith('01.') || (every && i%every===0)){const t=el('text',{x:x(i),y:f.H-8,'text-anchor':'middle',class:'lbl'},f.svg);t.textContent=m.startsWith('01.')?'20'+m.slice(3):mlabel(m);} });
+}
+function linePath(pts){return pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join('');}
+
+// crosshair hover for line charts
+function crosshair(f, n, x, onTip, markers){
+  const g=el('g',{},f.svg);
+  const vl=el('line',{y1:f.m.t,y2:f.m.t+f.ih,stroke:'var(--axis)','stroke-width':1,opacity:0},g);
+  const dots=markers.map(c=>el('circle',{r:4.5,fill:c,stroke:'var(--surface)','stroke-width':2,opacity:0},g));
+  const hit=el('rect',{x:f.m.l,y:f.m.t,width:f.iw,height:f.ih,class:'hit'},f.svg);
+  const pick=ev=>{const r=f.svg.getBoundingClientRect();const px=(ev.clientX-r.left)*f.W/r.width;let i=Math.round((px-x(0))/(x(1)-x(0)));return Math.max(0,Math.min(n-1,i));};
+  hit.addEventListener('pointermove',ev=>{const i=pick(ev);const info=onTip(i);vl.setAttribute('x1',x(i));vl.setAttribute('x2',x(i));vl.setAttribute('opacity',1);info.ys.forEach((yy,k)=>{if(yy==null){dots[k].setAttribute('opacity',0);return;}dots[k].setAttribute('cx',x(i));dots[k].setAttribute('cy',yy);dots[k].setAttribute('opacity',1);});showTip(ev,info.html);});
+  hit.addEventListener('pointerleave',()=>{vl.setAttribute('opacity',0);dots.forEach(d=>d.setAttribute('opacity',0));hideTip();});
+}
+
+function drawAlive(){
+  const c=document.querySelector('#f-alive .chart'); c.innerHTML='';
+  const f=frame(c,260), M=D.months, v=D.alive, n=M.length;
+  const ticks=niceTicks(0,Math.max(...v),4);
+  const x=i=>f.m.l+i*f.iw/(n-1), y=t=>f.m.t+f.ih-(t/ticks[ticks.length-1])*f.ih;
+  yAxis(f,ticks,y); xMonthLabels(f,M,x);
+  el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(0),y2:y(0),class:'base'},f.svg);
+  const pts=v.map((d,i)=>[x(i),y(d)]);
+  el('path',{d:linePath(pts)+`L${x(n-1)},${y(0)}L${x(0)},${y(0)}Z`,fill:'var(--s1-soft)',opacity:.6},f.svg);
+  el('path',{d:linePath(pts),fill:'none',stroke:'var(--s1)','stroke-width':2,'stroke-linejoin':'round'},f.svg);
+  const imax=v.indexOf(Math.max(...v));
+  [[imax,'пик '+v[imax]],[n-1,v[n-1]+'']].forEach(([i,t])=>{el('circle',{cx:x(i),cy:y(v[i]),r:4,fill:'var(--s1)',stroke:'var(--surface)','stroke-width':2},f.svg);const tx=el('text',{x:x(i)+(i===n-1?-6:0),y:y(v[i])-10,'text-anchor':i===n-1?'end':'middle',class:'dl'},f.svg);tx.textContent=t;});
+  crosshair(f,n,x,i=>({ys:[y(v[i])],html:`<b>${mfull(M[i])}</b>Работающих проектов: <strong>${v[i]}</strong>`}),['var(--s1)']);
+}
+
+function drawBars(sel, vals, opts){
+  const c=document.querySelector(sel+' .chart'); c.innerHTML='';
+  const f=frame(c,opts.h||260), n=vals.length;
+  const mn=Math.min(0,...vals), mx=Math.max(0,...vals);
+  const ticks=niceTicks(mn,mx,opts.nt||5);
+  const lo=ticks[0], hi=ticks[ticks.length-1];
+  const y=t=>f.m.t+f.ih-(t-lo)/(hi-lo)*f.ih;
+  const step=f.iw/n, gap=Math.min(2, step*0.25), bw=Math.max(1,step-gap);
+  const x=i=>f.m.l+i*step+step/2;
+  yAxis(f,ticks,y,opts.suffix||'');
+  if(opts.months) xMonthLabels(f,opts.months,x);
+  const g=el('g',{},f.svg);
+  vals.forEach((v,i)=>{
+    const y0=y(0), y1=y(v), top=Math.min(y0,y1), h=Math.max(Math.abs(y1-y0), v===0?0:1);
+    const r=Math.min(3,bw/2,h);
+    const col=opts.color(v,i);
+    // rounded data-end, square at baseline
+    let d;
+    if(v>=0) d=`M${x(i)-bw/2},${y0}V${top+r}Q${x(i)-bw/2},${top} ${x(i)-bw/2+r},${top}H${x(i)+bw/2-r}Q${x(i)+bw/2},${top} ${x(i)+bw/2},${top+r}V${y0}Z`;
+    else d=`M${x(i)-bw/2},${y0}V${top+h-r}Q${x(i)-bw/2},${top+h} ${x(i)-bw/2+r},${top+h}H${x(i)+bw/2-r}Q${x(i)+bw/2},${top+h} ${x(i)+bw/2},${top+h-r}V${y0}Z`;
+    const p=el('path',{d,fill:col},g);
+    const hit=el('rect',{x:f.m.l+i*step,y:f.m.t,width:step,height:f.ih,class:'hit'},f.svg);
+    hit.addEventListener('pointermove',ev=>{p.setAttribute('opacity',.75);showTip(ev,opts.tip(v,i));});
+    hit.addEventListener('pointerleave',()=>{p.removeAttribute('opacity');hideTip();});
+  });
+  el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(0),y2:y(0),class:'base'},f.svg);
+  if(opts.after) opts.after(f,x,y);
+  return f;
+}
+
+function drawDeaths(){
+  const M=D.months;
+  drawBars('#f-deaths',D.deaths,{months:M,nt:4,color:()=>'var(--s2)',tip:(v,i)=>`<b>${mfull(M[i])}</b>«Смертей»: <strong>${v}</strong><br>Работающих на конец месяца: ${D.alive[i]}`,
+    after:(f,x,y)=>{const j=M.length-1;const t=el('text',{x:x(j)-8,y:y(D.deaths[j])+10,'text-anchor':'end',class:'dl'},f.svg);t.textContent=D.deaths[j]+' в '+mlabel(M[j]).split(' ')[0];}});
+}
+
+function drawCum(){
+  const c=document.querySelector('#f-cum .chart'); c.innerHTML='';
+  const f=frame(c,260), M=D.months, n=M.length;
+  const total=D.cum, al=D.alive, dead=D.cum.map((v,i)=>v-al[i]);
+  const ticks=niceTicks(0,Math.max(...total),4);
+  const x=i=>f.m.l+i*f.iw/(n-1), y=t=>f.m.t+f.ih-(t/ticks[ticks.length-1])*f.ih;
+  yAxis(f,ticks,y); xMonthLabels(f,M,x);
+  el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(0),y2:y(0),class:'base'},f.svg);
+  const ser=[[total,'var(--ink-3)'],[al,'var(--s1)'],[dead,'var(--s2)']];
+  ser.forEach(([s,col])=>el('path',{d:linePath(s.map((v,i)=>[x(i),y(v)])),fill:'none',stroke:col,'stroke-width':2,'stroke-linejoin':'round'},f.svg));
+  // direct labels at end
+  [[total[n-1],'всего '+total[n-1],-8],[dead[n-1],'«умерли» '+dead[n-1],-8],[al[n-1],'работают '+al[n-1],16]].forEach(([v,t,dy])=>{const tx=el('text',{x:x(n-1)-4,y:y(v)+dy,'text-anchor':'end',class:'dl'},f.svg);tx.textContent=t;});
+  crosshair(f,n,x,i=>({ys:[y(total[i]),y(al[i]),y(dead[i])],html:`<b>${mfull(M[i])}</b>Всего: <strong>${total[i]}</strong><br>Работающие: <strong>${al[i]}</strong><br>«Умершие»: <strong>${dead[i]}</strong>`}),['var(--ink-3)','var(--s1)','var(--s2)']);
+}
+
+function drawAvg(){
+  const M=D.months;
+  drawBars('#f-avg',D.avg,{months:M,suffix:'%',color:v=>v>=0?'var(--s1)':'var(--s2)',tip:(v,i)=>`<b>${mfull(M[i])}</b>Среднерыночная доходность: <strong>${sgn(v)}%</strong>`,
+    after:(f,x,y)=>{const j=M.length-1;if(Math.abs(D.avg[j])>=5){const t=el('text',{x:x(j)-6,y:y(D.avg[j])+4,'text-anchor':'end',class:'dl'},f.svg);t.textContent=sgn(D.avg[j])+'%';}
+      const i=M.indexOf('02.24');const t2=el('text',{x:x(i)+6,y:y(D.avg[i])+4,class:'dl'},f.svg);t2.textContent='+28,8%';}});
+}
+
+function drawDist(){
+  const A=D.aug, vals=A.map(a=>a[1]), mean=D.stats.mean, med=D.stats.median;
+  drawBars('#f-dist',vals,{h:260,suffix:'%',color:v=>v>=0?'var(--s1)':'var(--s2)',tip:(v,i)=>`<b>#${i+1} из ${vals.length}</b>${A[i][0]}<br>Доходность за месяц: <strong>${sgn(v,2)}%</strong>`,
+    after:(f,x,y)=>{[[mean,'var(--ink)','среднее',f.W-f.m.r],[med,'var(--ink-3)','медиана',f.m.l+f.iw*0.62]].forEach(([v,col,l,lx])=>{el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(v),y2:y(v),stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 4'},f.svg);const t=el('text',{x:lx,y:y(v)-6,'text-anchor':'end',class:'dl'},f.svg);t.textContent=l+' '+sgn(v)+'%';});
+      const t=el('text',{x:x(0)+6,y:y(vals[0])+4,class:'dl'},f.svg);t.textContent=sgn(vals[0])+'%';}});
+}
+
+function drawIdx(){
+  const c=document.querySelector('#f-idx .chart'); c.innerHTML='';
+  const f=frame(c,300), P=D.idx, n=P.length, M=P.map(p=>p[0]), v=P.map(p=>p[1]);
+  const tr=new Map(D.trend);
+  const ticks=niceTicks(Math.min(...v)-50,Math.max(...v)+50,5);
+  const lo=ticks[0],hi=ticks[ticks.length-1];
+  const x=i=>f.m.l+i*f.iw/(n-1), y=t=>f.m.t+f.ih-(t-lo)/(hi-lo)*f.ih;
+  yAxis(f,ticks,y); xMonthLabels(f,M,x);
+  el('line',{x1:f.m.l,x2:f.W-f.m.r,y1:y(1000),y2:y(1000),stroke:'var(--axis)','stroke-width':1.5},f.svg);
+  const tpts=M.map((m,i)=>tr.has(m)?[x(i),y(tr.get(m))]:null).filter(Boolean);
+  el('path',{d:linePath(tpts),fill:'none',stroke:'var(--s2)','stroke-width':2,'stroke-dasharray':'6 5'},f.svg);
+  el('path',{d:linePath(v.map((d,i)=>[x(i),y(d)])),fill:'none',stroke:'var(--s1)','stroke-width':2,'stroke-linejoin':'round'},f.svg);
+  const j=n-1, k=v.indexOf(Math.max(...v));
+  el('circle',{cx:x(j),cy:y(v[j]),r:4.5,fill:'var(--s1)',stroke:'var(--surface)','stroke-width':2},f.svg);
+  let t=el('text',{x:x(j)-8,y:y(v[j])+18,'text-anchor':'end',class:'dl'},f.svg);t.textContent=fmt(v[j],2)+'$';
+  t=el('text',{x:x(k),y:y(v[k])-10,'text-anchor':'middle',class:'dl'},f.svg);t.textContent=fmt(v[k],2)+'$';
+  crosshair(f,n,x,i=>{const tv=tr.get(M[i]);return {ys:[y(v[i])],html:`<b>${mfull(M[i])}</b>Индекс: <strong>${fmt(v[i],2)}$</strong> (${sgn((v[i]/1000-1)*100)}%)`+(i?`<br>За месяц: ${sgn((v[i]/v[i-1]-1)*100)}%`:'')+(tv?`<br>Трендовая: ${fmt(tv,0)}$`:'')};},['var(--s1)']);
+}
+
+function drawLife(){
+  const c=document.querySelector('#f-life .chart'); c.innerHTML='';
+  const L=D.life, rowH=40;
+  const W=Math.max(320,c.clientWidth||800), narrow=W<520;
+  const m={t:4,r:40,b:24,l:narrow?86:110}, H=m.t+m.b+L.length*rowH;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img'},c);
+  const iw=W-m.l-m.r, mx=Math.max(...L.map(r=>Math.max(r.alive,r.dead)));
+  const ticks=niceTicks(0,mx,4), top=ticks[ticks.length-1], x=v=>m.l+v/top*iw;
+  const g=el('g',{class:'grid'},svg);
+  ticks.forEach(t=>{el('line',{x1:x(t),x2:x(t),y1:m.t,y2:H-m.b},g);const tx=el('text',{x:x(t),y:H-6,'text-anchor':'middle',class:'lbl'},svg);tx.textContent=t;});
+  const bh=14;
+  L.forEach((r,i)=>{
+    const y0=m.t+i*rowH+5;
+    const lab=el('text',{x:m.l-10,y:y0+bh+3,'text-anchor':'end',class:'lbl',style:'font-size:12px;fill:var(--ink-2)'},svg);lab.textContent=r.g;
+    [[r.alive,'var(--s1)',y0,'Работающие'],[r.dead,'var(--s2)',y0+bh+2,'«Умершие»']].forEach(([v,col,yy,name])=>{
+      const w=Math.max(0,x(v)-m.l), rr=Math.min(3,w/2);
+      const p=el('path',{d:w>0?`M${m.l},${yy}H${m.l+w-rr}Q${m.l+w},${yy} ${m.l+w},${yy+rr}V${yy+bh-rr}Q${m.l+w},${yy+bh} ${m.l+w-rr},${yy+bh}H${m.l}Z`:'',fill:col},svg);
+      const t=el('text',{x:m.l+w+6,y:yy+bh-3,class:'lbl',style:'fill:var(--ink-2)'},svg);t.textContent=v;
+      const hit=el('rect',{x:m.l,y:yy-1,width:iw,height:bh+2,class:'hit'},svg);
+      hit.addEventListener('pointermove',ev=>{p.setAttribute('opacity',.75);showTip(ev,`<b>Срок жизни: ${r.g}</b>${name}: <strong>${v}</strong>`);});
+      hit.addEventListener('pointerleave',()=>{p.removeAttribute('opacity');hideTip();});
+    });
+  });
+  el('line',{x1:m.l,x2:m.l,y1:m.t,y2:H-m.b,class:'base'},svg);
+}
+
+function tables(){
+  const pct=(a,b)=>b?fmt(a/b*100,0)+'%':'—';
+  const tb=document.getElementById('neg-body'); let ta=[0,0,0,0];
+  D.life.forEach(r=>{ta=[ta[0]+r.alive,ta[1]+r.aliveNeg,ta[2]+r.dead,ta[3]+r.deadNeg];tb.insertAdjacentHTML('beforeend',`<tr><td>${r.g}</td><td>${r.alive}</td><td>${r.aliveNeg}</td><td>${pct(r.aliveNeg,r.alive)}</td><td>${r.dead}</td><td>${r.deadNeg}</td><td>${pct(r.deadNeg,r.dead)}</td></tr>`);});
+  tb.insertAdjacentHTML('beforeend',`<tr class="total"><td>Всего</td><td>${ta[0]}</td><td>${ta[1]}</td><td>${fmt(ta[1]/ta[0]*100)}%</td><td>${ta[2]}</td><td>${ta[3]}</td><td>${fmt(ta[3]/ta[2]*100)}%</td></tr>`);
+  const mk=(id,head,rows)=>{document.querySelector(`[data-table="${id}"]`).innerHTML=`<table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;};
+  const M=D.months, rev=a=>a.slice().reverse();
+  mk('alive',['Месяц','Работающих'],rev(M.map((m,i)=>[mfull(m),D.alive[i]])));
+  mk('deaths',['Месяц','«Смертей»'],rev(M.map((m,i)=>[mfull(m),D.deaths[i]])));
+  mk('avg',['Месяц','Доходность'],rev(M.map((m,i)=>[mfull(m),sgn(D.avg[i])+'%'])));
+  mk('idx',['Месяц','Баланс','Значение'],rev(D.idx.map(([m,v])=>[mfull(m),fmt(v,2)+'$',sgn((v/1000-1)*100)+'%'])));
+}
+
+function drawAll(){drawAlive();drawDeaths();drawCum();drawAvg();drawDist();drawIdx();drawLife();}
+tables(); drawAll();
+let rt; addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,150);});
+</script>
+</body>
+</html>
