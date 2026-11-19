@@ -1,0 +1,40 @@
+# Pulls the public Google Sheet into static/mediana-research_MMYYYY.csv and commits it when it changed.
+# The server picks the commit up by itself (mediana-update.timer), and "/" and "/projects" rebuild from the new CSV.
+name: Sync Google Sheet
+
+on:
+  schedule:
+    - cron: "17 */3 * * *"   # every 3 hours
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-sheet
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download sheet
+        run: python sync_sheet.py
+
+      - name: Commit if changed
+        run: |
+          git add static/*.csv
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync data from Google Sheet: $(git diff --cached --name-only | xargs -n1 basename | tr '\n' ' ')"
+          git push
