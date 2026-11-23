@@ -30,6 +30,7 @@ EXPLORER_FILE = HTML_DIR / "explorer.html"  # project explorer widget, filled fr
 PROJECTS_FILE = HTML_DIR / "projects.html"  # standalone page for the widget: /projects
 
 SITE_URL = "https://mediana-research.com"
+INDEXNOW_KEY_FILE = BASE_DIR / "indexnow.key"  # IndexNow key: public by design, served at /<key>.txt
 SITE_NAME = "Mediana Research"
 ICON_URL = "/static/images/icon-180.png"
 SHARE_IMAGE_URL = f"{SITE_URL}/static/images/icon-512.png"
@@ -395,6 +396,14 @@ def sitemap() -> Response:
         + "\n</urlset>\n"
     )
     return Response(xml, media_type="application/xml")
+
+
+@app.api_route("/{key}.txt", methods=["GET", "HEAD"])
+def indexnow_key(key: str) -> PlainTextResponse:
+    """IndexNow ownership proof: /<key>.txt answers with the key itself."""
+    if not INDEXNOW_KEY_FILE.is_file() or key != INDEXNOW_KEY_FILE.read_text().strip():
+        raise HTTPException(status_code=404)
+    return PlainTextResponse(key)
 
 
 @app.api_route("/favicon.ico", methods=["GET", "HEAD"])

@@ -39,4 +39,10 @@ if [ "$LOCAL" != "$REMOTE" ]; then
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting mediana.service..."
         systemctl start mediana || true
     fi
+
+    # Tell Bing (IndexNow) about new or changed pages; a failure must not break the update
+    if git diff --name-only "$LOCAL" "$REMOTE" | grep -Eq "^(static/|drafts/)"; then
+        sleep 5
+        python3 indexnow.py || echo "[$(date '+%Y-%m-%d %H:%M:%S')] IndexNow ping failed."
+    fi
 fi
